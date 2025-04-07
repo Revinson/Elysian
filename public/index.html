@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Innovative Event & Party-Community Plattform</title>
+  <meta name="description" content="Elysian - Die revolutionäre Event & Community-Plattform mit Fokus auf Sicherheit, Interaktion und Innovation. Dein digitales Portal zur Event-Zukunft.">
+  <meta name="keywords" content="Event-Plattform, DJ-Voting, Sicherheit, Live-Maps, Community, Nachtleben, Underground">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/mythic-effects.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Open Graph Tags -->
+  <meta property="og:title" content="Elysian - Innovative Event & Party-Community Plattform">
+  <meta property="og:description" content="Die Zukunft des Nachtlebens - Events, Interaktion, Sicherheit und VIP-Zugang zur Underground-Szene.">
+  <!-- Strukturierte Daten für Suchmaschinen -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Elysian",
+      "url": "https://elysian-events.com",
+      "description": "Innovative Event-Plattform mit Fokus auf Sicherheit, Interaktion und Community."
+    }
+  </script>
+</head>
+<body>
+  <!-- Intro-Animation -->
+  <div class="intro-animation">
+    <video class="intro-video" autoplay loop muted playsinline>
+      <source src="opening/opening.mp4" type="video/mp4">
+    </video>
+    <div class="intro-tagline">Elysian</div>
+  </div>
+
+  <!-- Neuronales Netzwerk Hintergrund (dynamisch generiert) -->
+  <canvas class="neural-bg" aria-hidden="true"></canvas>
+  
+  <!-- Dynamischer Hintergrund -->
+  <div class="bg-animation" aria-hidden="true"></div>
+  <div id="particles-js" aria-hidden="true"></div>
+  
+  <!-- Glitch-Effekt-Overlay -->
+  <div class="glitch-overlay" aria-hidden="true"></div>
+
+  <!-- Glühende Punkte im Hintergrund -->
+  <div class="glow-dots" aria-hidden="true">
+    <div class="glow-dot" style="width:300px; height:300px; top:20%; left:10%;"></div>
+    <div class="glow-dot" style="width:250px; height:250px; top:60%; left:80%;"></div>
+    <div class="glow-dot" style="width:200px; height:200px; top:30%; left:70%;"></div>
+    <div class="glow-dot" style="width:180px; height:180px; top:80%; left:30%;"></div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="logo-area">
+      <img src="./images/elysian_logo.png" alt="Elysian Logo" class="header-logo">
+      <div class="logo-glow"></div>
+    </div>
+    <nav class="top-nav" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="register.html" class="nav-link"><span class="link-hover-effect">Registrieren</span></a></li>
+        <li><a href="login.html" class="nav-link"><span class="link-hover-effect">Login</span></a></li>
+        <li><a href="#about" class="nav-link"><span class="link-hover-effect">Über Uns</span></a></li>
+        <li><a href="#features" class="nav-link"><span class="link-hover-effect">Features</span></a></li>
+        <li><a href="#events" class="nav-link"><span class="link-hover-effect">Events</span></a></li>
+        <li><a href="#safety" class="nav-link"><span class="link-hover-effect">Sicherheit</span></a></li>
+        <li><a href="map.html" class="nav-link"><span class="link-hover-effect">Map</span></a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Dark/Light Modus wechseln">
+        <i class="fas fa-moon"></i>
+      </button>
+      <div class="mobile-menu-toggle" aria-label="Menü öffnen">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero-Abschnitt -->
+  <section class="hero">
+    <div class="hero-mask"></div>
+    <div class="hero-content">
+      <h1 class="glitch" data-text="ELYSIAN">ELYSIAN</h1>
+      <h2 class="hero-subtitle holographic-text">Die Event & Party-Revolution</h2>
+      <p class="hero-description">Elysian vernetzt und schützt dich bei Events wie nie zuvor. Mit interaktiven Live-Maps, 
+        Votings und dem Rescue-Button revolutionieren wir das Nachtleben. <strong>Du gestaltest die Party mit</strong> - 
+        ob als Besucher, Creator oder Veranstalter.</p>
+      <div class="hero-tags">
+        <span class="tag">Sichere Events</span>
+        <span class="tag">Community</span>
+        <span class="tag">DJ-Voting</span>
+        <span class="tag">Live-Maps</span>
+        <span class="tag">Gamification</span>
+        <span class="tag">Party 2.0</span>
+      </div>
+      <div class="buttons">
+        <a href="register.html" class="btn cta-btn btn-glow morph">
+          <span class="btn-text">Jetzt Teil werden</span>
+          <i class="fas fa-arrow-right btn-icon"></i>
+        </a>
+        <a href="#about" class="btn secondary-btn morph">
+          <span class="btn-text">Mehr erfahren</span>
+          <i class="fas fa-info-circle btn-icon"></i>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-shape"></div>
+      <div class="pulse-circles">
+        <div class="pulse-circle"></div>
+        <div class="pulse-circle"></div>
+        <div class="pulse-circle"></div>
+      </div>
+      
+      <!-- Parallax-Shapes -->
+      <div class="parallax-shape" style="width:200px; height:200px; top:20%; left:15%;" data-speed="0.05"></div>
+      <div class="parallax-shape" style="width:300px; height:300px; top:60%; left:70%;" data-speed="0.1"></div>
+    </div>
+    <div class="hero-scroll-indicator">
+      <span>Scroll</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+  </section>
+  
+  <!-- Geschwungener Übergang -->
+  <div class="section-transition">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path fill="#10001A" fill-opacity="1" d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,48C960,53,1056,75,1152,80C1248,85,1344,75,1392,69.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+    </svg>
+  </div>
+
+  <!-- About-Abschnitt (Neu) -->
+  <section id="about" class="about-section">
+    <div class="section-container">
+      <h2 class="section-title glitch-hover">Was ist <span class="highlight">Elysian</span>?</h2>
+      
+      <div class="about-grid">
+        <div class="about-card cyber-border">
+          <div class="about-icon">
+            <i class="fas fa-glass-cheers"></i>
+          </div>
+          <h3>Mehr als eine Party-App</h3>
+          <p>Elysian revolutioniert das Nachtleben durch die nahtlose Verbindung von Event-Management, Community-Features und innovativen Sicherheitssystemen – alles in einer Plattform.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="about-card cyber-border">
+          <div class="about-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Sicherheit im Fokus</h3>
+          <p>Mit unserem Rescue-Button, Safezones und Freundesfinder schaffen wir eine sichere Umgebung für alle Eventbesucher. Deine Sicherheit steht bei uns an erster Stelle.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="about-card cyber-border">
+          <div class="about-icon">
+            <i class="fas fa-music"></i>
+          </div>
+          <h3>DJs & Künstler empowern</h3>
+          <p>Neue Monetarisierungs- und Booking-Möglichkeiten für Künstler. Erhalte Live-Feedback, sammle Spenden und verkaufe exklusive Inhalte direkt über die App.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+      </div>
+      <div class="about-vision">
+        <h3 class="vision-subtitle">Unsere Vision</h3>
+        <p class="vision-text">"Elysian ist nicht nur eine App – es ist eine Bewegung, die Clubkultur, Technologie & Sicherheit vereint. Wir erschaffen einen Raum, in dem sich alle wohlfühlen können, während wir das Nachtleben durch Innovation auf ein neues Level heben."</p>
+      </div>
+     
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:350px; height:350px; top:40%; left:85%;" data-speed="0.1"></div>
+    <div class="parallax-shape" style="width:200px; height:200px; top:20%; left:20%;" data-speed="0.05"></div>
+  </section>
+  
+  <!-- Geschwungener Übergang -->
+  <div class="section-transition">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path fill="#10001A" fill-opacity="1" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,53.3C960,53,1056,43,1152,42.7C1248,43,1344,53,1392,58.7L1440,64L1440,100L1392,100C1344,100,1248,100,1152,100C1056,100,960,100,864,100C768,100,672,100,576,100C480,100,384,100,288,100C192,100,96,100,48,100L0,100Z"></path>
+    </svg>
+  </div>
+
+  <!-- Features Section (Verbessert) -->
+  <section id="features" class="features-section">
+    <div class="section-container">
+      <h2 class="section-title glitch-hover">Maßgeschneiderte <span class="highlight">Features</span> für dich</h2>
+      
+      <div class="target-group-tabs">
+        <button class="target-tab active" data-target="eventgoers">Für Eventbesucher (Elysianer)</button>
+        <button class="target-tab" data-target="artists">Für Creator & DJs</button>
+        <button class="target-tab" data-target="organizers">Für Veranstalter & Clubs (HQ)</button>
+      </div>
+      
+      <!-- ELYSIANER FEATURES -->
+      <div class="features-grid target-content active" id="eventgoers-content">
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-map-marked-alt"></i>
+          </div>
+          <h3>Live Event Maps</h3>
+          <p>Finde Bars, Tanzflächen und Freunde in Echtzeit. Heatmaps zeigen dir, wo die beste Stimmung herrscht.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-vote-yea"></i>
+          </div>
+          <h3>Live-Voting & Musikwünsche</h3>
+          <p>Beeinflusse die Musik durch Live-Voting für Songs und DJ-Entscheidungen. Erlebe wahre interaktive Events.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-hands-helping"></i>
+          </div>
+          <h3>Rescue-Button & Safezones</h3>
+          <p>Mit einem Klick Hilfe holen oder Freunde alarmieren. Safezones und Notfallstationen sind in der App sichtbar.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-ticket-alt"></i>
+          </div>
+          <h3>Ticket & VIP-Upgrades</h3>
+          <p>Tickets direkt in der App kaufen und via QR-Code einlösen. Spontane VIP-Upgrades und After-Hour-Zugänge buchen.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-user-friends"></i>
+          </div>
+          <h3>Spot-My-Friend</h3>
+          <p>Freunde auf der Karte lokalisieren und wiederfinden. Treffpunkte setzen und gemeinsam das Event erleben.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Pulse/Flux Teams</h3>
+          <p>Finde dein Team und erkunde die Szene mit Gleichgesinnten in der sozialen Dimension.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+      </div>
+      
+      <!-- CREATOR FEATURES -->
+      <div class="features-grid target-content" id="artists-content">
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-money-bill-wave"></i>
+          </div>
+          <h3>Direkte Monetarisierung</h3>
+          <p>Erhalte Spenden während deines Sets und verkaufe exklusive Inhalte wie Mixes, Tracks oder Kurse direkt an deine Fans.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <h3>Booking-Plattform</h3>
+          <p>Werde direkt für Events gebucht. Verwalte deinen Terminkalender und verbinde dich mit Veranstaltern in der ganzen Szene.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Live-Feedback & Analytics</h3>
+          <p>Erhalte Echtzeit-Feedback zu deinen Sets. Sieh, welche Tracks am besten ankommen und optimiere deine Performance.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <h3>Community-Rankings</h3>
+          <p>Steige in den Community-Rankings auf und gewinne an Sichtbarkeit. Newcomer-Förderung durch die App-Features.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-music"></i>
+          </div>
+          <h3>DJ-Battles & Challenges</h3>
+          <p>Nimm an Community-Challenges teil und fordere andere DJs zu Battles heraus. Gewinne Preise und Auftrittsmöglichkeiten.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <h3>Künstler-Netzwerk</h3>
+          <p>Vernetze dich mit anderen Künstlern für Kollaborationen und gemeinsame Projekte innerhalb der Elysian-Community.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+      </div>
+      
+      <!-- HQ FEATURES -->
+      <div class="features-grid target-content" id="organizers-content">
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-chart-area"></i>
+          </div>
+          <h3>Echtzeit-Analytics</h3>
+          <p>Erhalte Echtzeit-Daten über Besucherströme, Hotspots und Stimmung auf deinem Event. Optimiere die Veranstaltung noch während sie läuft.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <h3>VIP & Gästelisten-Management</h3>
+          <p>Verwalte Gästelisten und VIP-Bereiche digital. Ermögliche spontane Upgrades und maximiere deinen Umsatz.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Sicherheitsmonitoring</h3>
+          <p>Überwache Menschenmengen und identifiziere potenzielle Sicherheitsprobleme frühzeitig. Direkter Kontakt zum Security-Personal.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>DJ & Künstler-Booking</h3>
+          <p>Finde und buche passende DJs und Künstler basierend auf Genre, Verfügbarkeit und Community-Ratings direkt über die Plattform.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+          <h3>Event-Promotion</h3>
+          <p>Erreiche tausende App-Nutzer mit deinen Event-Ankündigungen. Zielgerichtetes Marketing basierend auf Nutzerinteressen.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+        
+        <div class="feature-card cyber-border" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3>Community-Feedback</h3>
+          <p>Erhalte wertvolles Feedback von Besuchern nach der Veranstaltung. Verbessere kontinuierlich deine Events basierend auf Nutzerdaten.</p>
+          <div class="card-glare"></div>
+          <div class="floating-layer"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:400px; height:400px; top:30%; left:10%;" data-speed="0.08"></div>
+    <div class="parallax-shape" style="width:250px; height:250px; top:70%; left:75%;" data-speed="0.15"></div>
+  </section>
+    
+  <!-- Geschwungener Übergang -->
+  <div class="section-transition">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path fill="#10001A" fill-opacity="1" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,53.3C960,53,1056,43,1152,42.7C1248,43,1344,53,1392,58.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+    </svg>
+  </div>
+
+  <!-- Sicherheits-Section -->
+  <section id="safety" class="safety-section">
+    <div class="section-container">
+      <h2 class="section-title glitch-hover">Deine <span class="highlight">Sicherheit</span> hat Priorität</h2>
+      
+      <div class="safety-content">
+        <div class="safety-image cyber-border">
+          <div class="safety-image-overlay"></div>
+          <!-- Pulsierender Kreis für Notfall-Button -->
+          <div class="emergency-pulse"></div>
+        </div>
+        
+        <div class="safety-features">
+          <div class="safety-feature">
+            <div class="safety-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <div class="safety-text">
+              <h3>Rescue-Button</h3>
+              <p>Mit einem Klick kannst du im Notfall Hilfe rufen oder deine Freunde alarmieren. Hilfe ist immer nur einen Fingertipp entfernt.</p>
+            </div>
+          </div>
+          
+          <div class="safety-feature">
+            <div class="safety-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="safety-text">
+              <h3>Safezones & Notfallstationen</h3>
+              <p>Safezones und Notfallstationen werden auf deiner Karte angezeigt, damit du im Bedarfsfall schnell einen sicheren Ort finden kannst.</p>
+            </div>
+          </div>
+          
+          <div class="safety-feature">
+            <div class="safety-icon">
+              <i class="fas fa-user-friends"></i>
+            </div>
+            <div class="safety-text">
+              <h3>Freundesfinder</h3>
+              <p>Verliere nie wieder deine Freunde. Teile deinen Standort mit ausgewählten Kontakten und finde sie jederzeit auf der Karte wieder.</p>
+            </div>
+          </div>
+          
+          <div class="safety-feature">
+            <div class="safety-icon">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="safety-text">
+              <h3>Awareness-Teams</h3>
+              <p>Unsere Awareness-Teams sind auf der Karte sichtbar und können bei Problemen direkt kontaktiert werden. Für ein respektvolles Miteinander.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="safety-quote">
+        <blockquote>"Unsere Mission ist es, die Sicherheit im Nachtleben zu revolutionieren und einen Raum zu schaffen, in dem sich jeder wohlfühlen kann. Mit innovativen Features wie dem Rescue-Button und Safezones setzen wir neue Maßstäbe."</blockquote>
+        <cite>– Das Elysian Team</cite>
+      </div>
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:300px; height:300px; top:50%; left:15%;" data-speed="0.12"></div>
+  </section>
+
+  <!-- Geschwungener Übergang -->
+<div class="section-transition">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+    <path fill="#10001A" fill-opacity="1" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,53.3C960,53,1056,43,1152,42.7C1248,43,1344,53,1392,58.7L1440,64L1440,100L1392,100C1344,100,1248,100,1152,100C1056,100,960,100,864,100C768,100,672,100,576,100C480,100,384,100,288,100C192,100,96,100,48,100L0,100Z"></path>
+  </svg>
+</div>
+
+  <!-- Events-Abschnitt -->
+  <section id="events" class="events-section">
+    <div class="section-container">
+      <h2 class="section-title glitch-hover">Kommende <span class="highlight">Events</span></h2>
+      
+      <div class="event-filter">
+        <button class="filter-btn active" data-filter="all">Alle</button>
+        <button class="filter-btn" data-filter="party">Parties</button>
+        <button class="filter-btn" data-filter="gaming">Gaming</button>
+        <button class="filter-btn" data-filter="community">Community</button>
+      </div>
+      
+      <div class="event-cards" id="event-list">
+        <!-- Wird dynamisch gefüllt -->
+        <div class="events-loading">
+          <div class="loading-indicator">
+            <span></span><span></span><span></span>
+          </div>
+          <p>Events werden geladen...</p>
+        </div>
+      </div>
+      
+      <div class="events-cta">
+        <a href="event.html" class="btn secondary-btn morph">
+          <span class="btn-text">Alle Events entdecken</span>
+          <i class="fas fa-calendar-alt btn-icon"></i>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:350px; height:350px; top:40%; left:85%;" data-speed="0.1"></div>
+    <div class="parallax-shape" style="width:200px; height:200px; top:20%; left:20%;" data-speed="0.05"></div>
+  </section>
+
+  <!-- Community-Stats-Abschnitt -->
+  <section class="stats-section">
+    <div class="section-container">
+      <h2 class="section-title glitch-hover">Die <span class="highlight">Community</span> wächst</h2>
+      
+      <div class="stats-grid">
+        <div class="stat-item cyber-border">
+          <div class="stat-value" data-count="3472">0</div>
+          <div class="stat-label">Community Mitglieder</div>
+          <svg class="stat-graph" viewBox="0 0 100 30">
+            <polyline points="0,25 10,20 20,22 30,15 40,18 50,10 60,8 70,12 80,5 90,7 100,2" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+          </svg>
+        </div>
+        
+        <div class="stat-item cyber-border">
+          <div class="stat-value" data-count="127">0</div>
+          <div class="stat-label">Events pro Monat</div>
+          <svg class="stat-graph" viewBox="0 0 100 30">
+            <polyline points="0,15 10,18 20,12 30,10 40,15 50,8 60,12 70,5 80,10 90,2 100,5" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+          </svg>
+        </div>
+        
+        <div class="stat-item cyber-border">
+          <div class="stat-value" data-count="32">0</div>
+          <div class="stat-label">Städte</div>
+          <svg class="stat-graph" viewBox="0 0 100 30">
+            <polyline points="0,20 10,18 20,15 30,16 40,10 50,12 60,8 70,9 80,5 90,6 100,2" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+          </svg>
+        </div>
+        
+        <div class="stat-item cyber-border">
+          <div class="stat-value" data-count="98">0</div>
+          <div class="stat-label">Partner-Clubs</div>
+          <svg class="stat-graph" viewBox="0 0 100 30">
+            <polyline points="0,22 10,18 20,20 30,15 40,16 50,10 60,12 70,8 80,9 90,5 100,3" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:300px; height:300px; top:50%; left:15%;" data-speed="0.12"></div>
+  </section>
+
+  <!-- Neuigkeiten-Abschnitt -->
+  <section class="news-section">
+    <div class="section-container">
+      <h2 class="section-title glitch-hover">Letzte <span class="highlight">Updates</span></h2>
+      
+      <div class="news-grid">
+        <div class="news-card cyber-border">
+          <div class="news-image" style="--gradient-color: rgba(193, 58, 252, 0.8)">
+            <div class="news-date">
+              <span class="day">15</span>
+              <span class="month">MRZ</span>
+            </div>
+          </div>
+          <div class="news-content">
+            <h3>Neues Feature: Rescue-Button</h3>
+            <p>Der Rescue-Button für mehr Sicherheit ist jetzt live. Im Notfall schnelle Hilfe rufen oder Freunde alarmieren.</p>
+            <a href="#" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="card-glare"></div>
+        </div>
+        
+        <div class="news-card cyber-border">
+          <div class="news-image" style="--gradient-color: rgba(0, 212, 255, 0.8)">
+            <div class="news-date">
+              <span class="day">08</span>
+              <span class="month">MRZ</span>
+            </div>
+          </div>
+          <div class="news-content">
+            <h3>DJ Pulse - Neues Team</h3>
+            <p>DJ Pulse ist jetzt offizieller Partner und unterstützt das Pulse-Team. Exklusive Sets ab nächster Woche.</p>
+            <a href="#" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="card-glare"></div>
+        </div>
+        
+        <div class="news-card cyber-border">
+          <div class="news-image" style="--gradient-color: rgba(252, 70, 107, 0.8)">
+            <div class="news-date">
+              <span class="day">02</span>
+              <span class="month">MRZ</span>
+            </div>
+          </div>
+          <div class="news-content">
+            <h3>Live-Voting System Release</h3>
+            <p>Ab sofort können Eventbesucher mit unserem Live-Voting System die Musik beeinflussen und aktiv am Event teilnehmen.</p>
+            <a href="#" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="card-glare"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:250px; height:250px; top:30%; left:75%;" data-speed="0.07"></div>
+  </section>
+
+  <!-- Survey-Abschnitt -->
+  <section class="survey-promo-section">
+    <div class="section-container">
+      <div class="survey-promo-content">
+        <div class="survey-icon">
+          <i class="fas fa-clipboard-list"></i>
+        </div>
+        <h2>Gestalte die Zukunft von Elysian</h2>
+        <p>Nimm an unserer Community-Umfrage teil und teile uns deine Wünsche und Ideen mit.</p>
+        <a href="survey.html" class="btn secondary-btn morph">
+          <span class="btn-text">Zur Umfrage</span>
+          <i class="fas fa-arrow-right btn-icon"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA-Abschnitt -->
+  <section class="final-cta-section">
+    <div class="section-container">
+      <div class="cta-content">
+        <h2 class="holographic-text glitch-hover">Bereit, Teil von etwas Größerem zu werden?</h2>
+        <p>Tritt der Elysian-Bewegung bei und gestalte mit uns gemeinsam die Zukunft des Nachtlebens. Egal ob als Besucher, Künstler oder Veranstalter – hier findest du eine Gemeinschaft, die mehr ist als die Summe ihrer Teile.</p>
+        <div class="cta-buttons">
+          <a href="register.html" class="btn cta-btn btn-large btn-glow morph">
+            <span class="btn-text">Kostenlos registrieren</span>
+            <i class="fas fa-bolt btn-icon"></i>
+          </a>
+          <a href="forum.html" class="btn secondary-btn btn-large morph">
+            <span class="btn-text">Community Forum</span>
+            <i class="fas fa-comments btn-icon"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Parallax-Shapes -->
+    <div class="parallax-shape" style="width:400px; height:400px; top:50%; left:50%; transform:translateX(-50%);" data-speed="0.05"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="./images/elysian_logo.png" alt="Elysian Logo" class="footer-logo">
+        <p>Die Zukunft des Nachtlebens und Events</p>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-nav">
+        <div class="footer-nav-column">
+          <h3>Navigation</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">Über Uns</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#safety">Sicherheit</a></li>
+            <li><a href="map.html">Map</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-nav-column">
+          <h3>Account</h3>
+          <ul>
+            <li><a href="register.html">Registrieren</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="profile.html">Profil</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="#">Premium</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-nav-column">
+          <h3>Info</h3>
+          <ul>
+            <li><a href="#">Über uns</a></li>
+            <li><a href="#">Partner werden</a></li>
+            <li><a href="#">Entwickler-API</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Kontakt</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Elysian – Die innovative Event-Community Plattform</p>
+      <div class="legal-links">
+        <a href="#">Datenschutz</a>
+        <a href="#">Impressum</a>
+        <a href="#">AGB</a>
+        <a href="#">Cookie-Einstellungen</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Wave Animation -->
+  <div class="wave-animation" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+      <path fill="#c13afc" fill-opacity="0.1" d="M0,192L48,197.3C96,203,192,213,288,192C384,171,480,117,576,117.3C672,117,768,171,864,165.3C960,160,1056,96,1152,74.7C1248,53,1344,75,1392,85.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+      <path fill="#c13afc" fill-opacity="0.2" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,128C672,107,768,117,864,149.3C960,181,1056,235,1152,240C1248,245,1344,203,1392,181.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    </svg>
+  </div>
+
+  <!-- Mobile Menu (versteckt per default) -->
+  <div class="mobile-menu">
+    <div class="mobile-menu-header">
+      <img src="./images/elysian_logo.png" alt="Elysian Logo" class="mobile-menu-logo">
+      <button class="mobile-menu-close" aria-label="Menü schließen"><i class="fas fa-times"></i></button>
+    </div>
+    <ul class="mobile-menu-nav">
+      <li><a href="#about" class="mobile-nav-link">Über Uns</a></li>
+      <li><a href="#features" class="mobile-nav-link">Features</a></li>
+      <li><a href="#safety" class="mobile-nav-link">Sicherheit</a></li>
+      <li><a href="#events" class="mobile-nav-link">Events</a></li>
+      <li><a href="map.html" class="mobile-nav-link">Live Map</a></li>
+      <li><a href="forum.html" class="mobile-nav-link">Forum</a></li>
+      <li><a href="register.html" class="mobile-nav-link highlight-link">Registrieren</a></li>
+      <li><a href="login.html" class="mobile-nav-link highlight-link">Login</a></li>
+    </ul>
+    <div class="mobile-social-links">
+      <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+    </div><p class="hero-description"></p>
+  </div>
+
+  <!-- Datenschutz-Banner -->
+  <div class="privacy-banner" id="privacy-banner">
+    <div class="privacy-content">
+      <p>Wir verwenden Cookies, um deine Erfahrung zu verbessern. Durch die Nutzung dieser Website stimmst du unserer <a href="#">Datenschutzrichtlinie</a> zu.</p>
+      <div class="banner-buttons">
+        <button class="btn secondary-btn" id="privacy-settings">Einstellungen</button>
+        <button class="btn cta-btn" id="privacy-accept">Akzeptieren</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification System -->
+  <div class="notification-container" id="notification-container"></div>
+
+  <!-- JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Mystisches Dashboard</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/dashboard.css">
+  <link rel="stylesheet" href="./css/mythic-effects.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Mystische Schriftarten -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Rajdhani:wght@300;400;600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen">
+    <div class="loading-content">
+      <div class="elysian-logo">ELYSIAN</div>
+      <div class="loading-spinner">
+        <div class="spinner-circle"></div>
+        <div class="spinner-inner"></div>
+      </div>
+      <div class="loading-text">Betreten der mystischen Welt...</div>
+    </div>
+  </div>
+
+  <!-- Dynamischer Hintergrund -->
+  <div class="bg-animation"></div>
+  <div id="particles-js"></div>
+
+  <div class="app-container">
+    <!-- Side Navigation -->
+    <aside class="side-nav">
+      <div class="logo-container">
+        <h2 class="logo">E</h2>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="dashboard.html" class="nav-item active" data-section="dashboard">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-section="events">
+          <i class="fas fa-calendar-check"></i>
+          <span>Events</span>
+        </a>
+        <a href="#" class="nav-item" data-section="map">
+          <i class="fas fa-map-marked-alt"></i>
+          <span>Karte</span>
+        </a>
+        <a href="#" class="nav-item" data-section="forum">
+          <i class="fas fa-comments"></i>
+          <span>Forum</span>
+        </a>
+        <a href="#" class="nav-item" data-section="music">
+          <i class="fas fa-headphones"></i>
+          <span>Musik</span>
+        </a>
+        <a href="#" class="nav-item" data-section="teams">
+          <i class="fas fa-users"></i>
+          <span>Teams</span>
+        </a>
+      </nav>
+      
+      <div class="nav-footer">
+        <a href="#" class="nav-item" data-section="profile">
+          <i class="fas fa-user-circle"></i>
+          <span>Profil</span>
+        </a>
+        <a href="#" class="nav-item" id="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="content-header">
+        <div class="user-welcome">
+          <h2>Elysian</h2>
+          <p id="welcome-msg">Willkommen zurück, Neon Raver!</p>
+        </div>
+        
+        <div class="user-level">
+          <div class="level-info">
+            <span>Level <span id="level-num" class="neon-text">4</span></span>
+            <span class="xp-text">XP: <span id="xp">70</span>/<span id="xp-next">100</span></span>
+          </div>
+          <div class="xp-bar-container">
+            <div id="xp-bar-fill" class="xp-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+        
+        <div class="action-buttons">
+          <button id="emergency-btn" class="btn-rescue"><i class="fas fa-exclamation-triangle"></i> Hilfe</button>
+          <button id="notifications-btn" class="icon-btn has-badge"><i class="fas fa-bell"></i></button>
+        </div>
+      </header>
+
+      <!-- Status Cards Row -->
+      <div class="status-row">
+        <div class="status-card">
+          <div class="status-icon">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <div class="status-info">
+            <h3>Nächstes Event</h3>
+            <p>Techno Friday <span>(3 Tage)</span></p>
+          </div>
+          <div class="status-tooltip">
+            Berlin Underground Club | 11PM - 6AM | Tickets verfügbar
+          </div>
+        </div>
+        
+        <div class="status-card">
+          <div class="status-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="status-info">
+            <h3>Team PULSE</h3>
+            <p>42 Mitglieder online</p>
+          </div>
+          <div class="status-tooltip">
+            Dein Team ist auf Platz 3 im Event-Ranking!
+          </div>
+        </div>
+        
+        <div class="status-card">
+          <div class="status-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="status-info">
+            <h3>Deine XP</h3>
+            <p>70 von 100 zum Level 5</p>
+          </div>
+          <div class="status-tooltip">
+            Belohnung bei Level 5: Exklusiver Elite-Status & VIP-Zugang
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Events Card -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-calendar-check"></i> Events</h3>
+            <div class="card-badge pulse">3 Neu</div>
+          </div>
+          <div class="card-content">
+            <div class="event-list">
+              <div class="event-item">
+                <div class="event-date">
+                  <span class="day">15</span>
+                  <span class="month">MAR</span>
+                </div>
+                <div class="event-details">
+                  <h4><i class="fas fa-star-of-life"></i> Neon Nights</h4>
+                  <p>Underground Club • 11PM</p>
+                </div>
+                <button class="event-action"><i class="far fa-bookmark"></i></button>
+                <div class="event-elite">Elite</div>
+              </div>
+              
+              <div class="event-item">
+                <div class="event-date">
+                  <span class="day">22</span>
+                  <span class="month">MAR</span>
+                </div>
+                <div class="event-details">
+                  <h4>Bass Ritual</h4>
+                  <p>Warehouse 7 • 10PM</p>
+                </div>
+                <button class="event-action"><i class="far fa-bookmark"></i></button>
+              </div>
+              
+              <div class="event-item">
+                <div class="event-date">
+                  <span class="day">29</span>
+                  <span class="month">MAR</span>
+                </div>
+                <div class="event-details">
+                  <h4>Pulse x Flux</h4>
+                  <p>Crystal Club • 11PM</p>
+                </div>
+                <button class="event-action"><i class="far fa-bookmark"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button id="view-events-btn" class="card-btn"><i class="fas fa-eye"></i> Alle Events</button>
+          </div>
+        </div>
+
+        <!-- Map Card -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-map-marked-alt"></i> Live Map</h3>
+            <div class="card-badge">3 Hotspots</div>
+          </div>
+          <div class="card-content">
+            <div class="map-preview">
+              <div class="map-grid"></div>
+              <!-- Radar overlay - NEU -->
+              <div class="radar-overlay">
+                <div class="radar-sweep"></div>
+                <div class="radar-circles"></div>
+              </div>
+              <div class="map-dot" style="top: 35%; left: 45%;">
+                <span class="dot-pulse"></span>
+                <div class="dot-tooltip">Club Neon (42 members)</div>
+              </div>
+              <div class="map-dot" style="top: 65%; left: 20%;">
+                <span class="dot-pulse"></span>
+                <div class="dot-tooltip">Warehouse District (16 members)</div>
+              </div>
+              <div class="map-dot elite-dot" style="top: 25%; left: 75%;">
+                <span class="dot-pulse"></span>
+                <div class="dot-tooltip">Crystal Lounge (8 members)</div>
+              </div>
+              <div class="map-dot animation-enhanced" style="top: 50%; left: 60%;">
+                <span class="dot-pulse"></span>
+                <div class="dot-tooltip">LIVE EVENT: Techno Friday (27 members)</div>
+              </div>
+              <div class="map-overlay">
+                <span>Live-Karte mit Freunde-Tracking und Hotspots</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button id="view-map-btn" class="card-btn"><i class="fas fa-map"></i> Zur Live-Map</button>
+          </div>
+        </div>
+
+        <!-- Music Card -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-headphones"></i> Musik</h3>
+            <div class="card-badge">2 Live</div>
+          </div>
+          <div class="card-content">
+            <div class="music-player">
+              <div class="now-playing">
+                <div class="track-art"></div>
+                <div class="track-info">
+                  <h4>Neon Dreams - Electric Horizon</h4>
+                  <p>DJ Pulsar</p>
+                  <div class="audio-visualizer">
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="track-progress">
+                <span class="current-time">0:00</span>
+                <div class="progress-bar">
+                  <div class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+                <span class="track-duration">3:45</span>
+              </div>
+              
+              <div class="player-controls">
+                <button class="control-btn"><i class="fas fa-step-backward"></i></button>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <button class="control-btn"><i class="fas fa-step-forward"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="card-btn"><i class="fas fa-broadcast-tower"></i> Live Streams</button>
+          </div>
+        </div>
+
+        <!-- Survey Card -->
+        <!-- New Feature: Event Challenges -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-fire"></i> Challenges</h3>
+            <div class="card-badge pulse">Neu</div>
+          </div>
+          <div class="card-content">
+            <div class="challenge-list">
+              <div class="challenge-item">
+                <div class="challenge-icon"><i class="fas fa-users"></i></div>
+                <div class="challenge-details">
+                  <h4>Squad Goals</h4>
+                  <p>Besuche ein Event mit 5+ Teammitgliedern</p>
+                  <div class="progress-container">
+                    <div class="progress-fill" style="width: 60%"></div>
+                  </div>
+                  <span class="challenge-reward gold-text">+250 XP</span>
+                </div>
+              </div>
+              <div class="challenge-item">
+                <div class="challenge-icon"><i class="fas fa-camera"></i></div>
+                <div class="challenge-details">
+                  <h4>Memory Maker</h4>
+                  <p>Teile 3 Event-Fotos in deiner Story</p>
+                  <div class="progress-container">
+                    <div class="progress-fill" style="width: 33%"></div>
+                  </div>
+                  <span class="challenge-reward gold-text">+100 XP</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="card-btn elite-btn"><i class="fas fa-fire"></i> Alle Challenges</button>
+          </div>
+        </div>
+        
+        <!-- Survey Card -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-poll"></i> Umfragen</h3>
+            <div class="card-badge">2 Aktiv</div>
+          </div>
+          <div class="card-content">
+            <div class="survey-list">
+              <div class="survey-item">
+                <h4>DJ Lineup Voting</h4>
+                <div class="progress-container">
+                  <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <div class="survey-meta">
+                  <span>89 Votes</span>
+                  <span>23h verbleibend</span>
+                </div>
+              </div>
+              
+              <div class="survey-item elite-survey">
+                <h4>Next Event Theme</h4>
+                <div class="progress-container">
+                  <div class="progress-fill" style="width: 42%"></div>
+                </div>
+                <div class="survey-meta">
+                  <span>53 Votes</span>
+                  <span>2d verbleibend</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button id="view-surveys-btn" class="card-btn"><i class="fas fa-vote-yea"></i> Vote Now</button>
+          </div>
+        </div>
+
+        <!-- Quests Card -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-trophy"></i> Quests</h3>
+            <div class="card-badge elite">3 Aktiv</div>
+          </div>
+          <div class="card-content">
+            <div class="quest-list">
+              <div class="quest-item">
+                <div class="quest-info">
+                  <h4><i class="fas fa-calendar-check"></i> Attend 1 Event</h4>
+                  <div class="progress-container">
+                    <div class="progress-fill" style="width: 0%"></div>
+                  </div>
+                  <div class="quest-rewards">
+                    <span class="reward locked"><i class="fas fa-lock"></i> +10 XP</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="quest-item">
+                <div class="quest-info">
+                  <h4><i class="fas fa-vote-yea"></i> Vote in 3 Surveys</h4>
+                  <div class="progress-container">
+                    <div class="progress-fill" style="width: 33%"></div>
+                  </div>
+                  <div class="progress-text">33%</div>
+                  <div class="quest-rewards">
+                    <span class="reward">+10 XP</span>
+                    <span class="reward locked"><i class="fas fa-lock"></i> Badge</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="quest-item elite-quest">
+                <div class="quest-info">
+                  <h4><i class="fas fa-user-check"></i> Complete Archetype Quiz</h4>
+                  <div class="progress-container">
+                    <div class="progress-fill elite-fill" style="width: 0%"></div>
+                  </div>
+                  <div class="progress-text">0%</div>
+                  <div class="quest-rewards">
+                    <span class="reward locked"><i class="fas fa-lock"></i> +25 XP</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="card-btn"><i class="fas fa-tasks"></i> Alle Quests</button>
+          </div>
+        </div>
+
+        <!-- Team Card -->
+        <div class="grid-card">
+          <div class="card-header">
+            <h3><i class="fas fa-users"></i> Team PULSE</h3>
+            <div class="card-badge">5 Badges</div>
+          </div>
+          <div class="card-content">
+            <div class="team-stats">
+              <div class="stat-item">
+                <div class="stat-value neon-text">76</div>
+                <div class="stat-label">Mitglieder</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value neon-text">12</div>
+                <div class="stat-label">Gewonnene Events</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value neon-text">1.8K</div>
+                <div class="stat-label">Gesamt-XP</div>
+              </div>
+            </div>
+            
+            <div class="online-members">
+              <h4>Online</h4>
+              <div class="avatar-group">
+                <div class="avatar" title="TechnoTim">
+                  <img src="./images/elysian_logo.png" alt="Avatar">
+                  <div class="elite-badge"></div>
+                </div>
+                <div class="avatar" title="BassQueen">
+                  <img src="./images/elysian_logo.png" alt="Avatar">
+                </div>
+                <div class="avatar" title="NeonDancer">
+                  <img src="./images/elysian_logo.png" alt="Avatar">
+                </div>
+                <div class="avatar" title="PulseRaver">
+                  <img src="./images/elysian_logo.png" alt="Avatar">
+                </div>
+                <div class="avatar" title="BeatMaster">
+                  <img src="./images/elysian_logo.png" alt="Avatar">
+                  <div class="elite-badge"></div>
+                </div>
+                <div class="avatar-more">+37</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button id="invite-friends-btn" class="card-btn"><i class="fas fa-user-plus"></i> Freunde einladen</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Notifications Panel - FIXED: removed "hidden" class -->
+  <div class="notifications-panel">
+    <div class="panel-header">
+      <h3><i class="fas fa-bell"></i> Benachrichtigungen</h3>
+      <button class="close-panel"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notifications-list">
+      <div class="notification-item unread">
+        <div class="notification-icon"><i class="fas fa-calendar-alt"></i></div>
+        <div class="notification-content">
+          <h4>Neues Event: Neon Nights</h4>
+          <p>Das Event findet am 15. März statt</p>
+          <small>Vor 2 Stunden</small>
+        </div>
+      </div>
+      <div class="notification-item unread elite-notification">
+        <div class="notification-icon"><i class="fas fa-user-plus"></i></div>
+        <div class="notification-content">
+          <h4>Neue Freundschaftsanfrage</h4>
+          <p>BeatMaster möchte dich als Freund hinzufügen</p>
+          <small>Vor 5 Stunden</small>
+        </div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-icon"><i class="fas fa-poll"></i></div>
+        <div class="notification-content">
+          <h4>Neues Voting: DJ Lineup</h4>
+          <p>Stimme jetzt ab für den nächsten DJ!</p>
+          <small>Vor 1 Tag</small>
+        </div>
+      </div>
+      <div class="notification-item">
+        <div class="notification-icon"><i class="fas fa-trophy"></i></div>
+        <div class="notification-content">
+          <h4>Quest abgeschlossen</h4>
+          <p>Du hast 50 XP für "Social Butterfly" erhalten</p>
+          <small>Vor 2 Tagen</small>
+        </div>
+      </div>
+      <div class="notification-item elite-notification">
+        <div class="notification-icon"><i class="fas fa-gem"></i></div>
+        <div class="notification-content">
+          <h4>Elite Status Update</h4>
+          <p>Nur noch 30 XP bis zum Elite Status!</p>
+          <small>Vor 3 Tagen</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Emergency Modal -->
+  <div class="emergency-modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-exclamation-triangle"></i> Hilfe anfordern</h3>
+        <button class="close-modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="important-text">Dein Standort wird an das Security-Team übermittelt.</p>
+        
+        <div class="emergency-options">
+          <button class="emergency-option" data-type="medical">
+            <i class="fas fa-medkit"></i>
+            <span>Medizinischer Notfall</span>
+          </button>
+          <button class="emergency-option" data-type="security">
+            <i class="fas fa-shield-alt"></i>
+            <span>Security / Belästigung</span>
+          </button>
+          <button class="emergency-option" data-type="friend">
+            <i class="fas fa-users"></i>
+            <span>Freunde benachrichtigen</span>
+          </button>
+          <button class="emergency-option" data-type="exit">
+            <i class="fas fa-door-open"></i>
+            <span>Sichere Begleitung zum Ausgang</span>
+          </button>
+        </div>
+        
+        <textarea id="emergency-message" placeholder="Optionale Nachricht..."></textarea>
+        
+        <button id="send-emergency" class="btn-animated"><i class="fas fa-paper-plane"></i> Notfall melden</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/dashboard.js"></script>
+</body>
+</html>

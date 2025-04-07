@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Events</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/event.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Dynamischer Hintergrund - Werden durch JavaScript mit minimaler Höhe initialisiert -->
+  <div class="bg-animation"></div>
+  <div id="particles-js"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="content-header">
+      <div class="user-welcome">
+        <h2>Elysian Events</h2>
+        <p>Entdecke kommende Veranstaltungen</p>
+      </div>
+      
+      <div class="action-buttons">
+        <button id="back-dashboard-btn" class="neon-btn"><i class="fas fa-home"></i> Dashboard</button>
+      </div>
+    </header>
+
+    <!-- Events Liste - Hauptinhalt, jetzt direkt sichtbar -->
+    <section class="events-grid">
+      <h2><i class="fas fa-calendar-alt"></i> Aktuelle & Kommende Events</h2>
+      <div class="event-cards" id="event-list">
+        <!-- Wird dynamisch mit JavaScript befüllt -->
+        <div class="loading-animation">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Event Erstellen - Nach unten verschoben -->
+    <section class="create-event-section">
+      <div class="grid-card">
+        <div class="card-header">
+          <h3><i class="fas fa-plus-circle"></i> Neues Event erstellen</h3>
+          <div class="card-badge pulse">Creator</div>
+        </div>
+        <div class="card-content">
+          <form id="create-event-form" class="event-form">
+            <div class="form-group">
+              <label for="title">Event Titel</label>
+              <input type="text" id="title" required placeholder="z.B. Techno Friday" />
+            </div>
+            
+            <div class="form-group">
+              <label for="date">Datum</label>
+              <input type="date" id="date" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="description">Beschreibung</label>
+              <textarea id="description" placeholder="Infos zum Event..."></textarea>
+            </div>
+            
+            <button type="submit" class="neon-btn btn-animated"><i class="fas fa-save"></i> Event erstellen</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/event.js"></script>
+</body>
+</html>

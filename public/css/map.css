@@ -1,0 +1,767 @@
+/* map.css - Futuristisches Styling für die Kartenansicht */
+
+/* Header */
+.map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.7);
+    padding: 15px 25px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: 0 0 15px var(--primary-neon);
+    position: relative;
+    z-index: 10;
+    border-bottom: 1px solid rgba(193, 58, 252, 0.3);
+  }
+  
+  .brand-logo .subtitle {
+    font-size: 1rem;
+    opacity: 0.7;
+    letter-spacing: 2px;
+    display: block;
+    text-align: right;
+    margin-top: -5px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .event-info {
+    display: flex;
+    flex-direction: column;
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(193, 58, 252, 0.3);
+  }
+  
+  .event-name, .event-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .event-name {
+    font-weight: bold;
+  }
+  
+  /* Map Section */
+  .map-section {
+    display: flex;
+    height: calc(100vh - 80px);
+    position: relative;
+    z-index: 5;
+  }
+  
+  .map-controls {
+    width: 300px;
+    background: rgba(0, 0, 0, 0.6);
+    border-right: 1px solid rgba(193, 58, 252, 0.3);
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .control-group {
+    margin-bottom: 20px;
+  }
+  
+  .control-group h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-neon);
+    text-shadow: 0 0 5px var(--primary-neon);
+  }
+  
+  .map-btn {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(193, 58, 252, 0.3);
+    color: white;
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+  }
+  
+  .map-btn:hover {
+    background: rgba(193, 58, 252, 0.2);
+    border-color: var(--primary-neon);
+  }
+  
+  .map-btn.active {
+    background: rgba(193, 58, 252, 0.3);
+    border-color: var(--primary-neon);
+    box-shadow: 0 0 10px rgba(193, 58, 252, 0.5);
+  }
+  
+  .map-btn i {
+    color: var(--primary-neon);
+  }
+  
+  /* Rescue Button */
+  .btn-rescue {
+    background: #f00;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    padding: 10px 16px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .btn-rescue:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+  }
+  
+  /* Friends List */
+  .friends-list-container {
+    margin-top: 20px;
+  }
+  
+  .friends-list {
+    max-height: 300px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border: 1px solid rgba(193, 58, 252, 0.2);
+  }
+  
+  .friend-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid rgba(193, 58, 252, 0.1);
+    transition: background 0.3s;
+  }
+  
+  .friend-item:hover {
+    background: rgba(193, 58, 252, 0.1);
+  }
+  
+  .friend-item.online {
+    position: relative;
+  }
+  
+  .friend-item.online::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    background: #4caf50;
+    border-radius: 50%;
+    box-shadow: 0 0 5px #4caf50;
+  }
+  
+  .friend-item.offline {
+    opacity: 0.6;
+  }
+  
+  /* Füge dies zu deiner map.css hinzu */
+
+.friend-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(193, 58, 252, 0.2);
+  border: 2px solid rgba(193, 58, 252, 0.5);
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.friend-avatar i {
+  font-size: 20px;
+  color: rgba(193, 58, 252, 0.8);
+}
+  
+  .friend-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .friend-name {
+    font-weight: bold;
+  }
+  
+  .friend-location {
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  
+  .friend-locate-btn {
+    background: rgba(193, 58, 252, 0.2);
+    border: none;
+    color: var(--primary-neon);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .friend-locate-btn:hover {
+    background: rgba(193, 58, 252, 0.4);
+    transform: scale(1.1);
+  }
+  
+  .friend-locate-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .friend-locate-btn:disabled:hover {
+    background: rgba(193, 58, 252, 0.2);
+    transform: none;
+  }
+  
+  /* Map Container */
+  .map-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #event-map {
+    height: 100%;
+    width: 100%;
+    background: #0c0c0c;
+  }
+  
+  /* Custom Leaflet styling */
+  .leaflet-container {
+    background: #0c0c0c;
+  }
+  
+  .leaflet-control-attribution {
+    background: rgba(0, 0, 0, 0.7) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+  
+  .leaflet-control-attribution a {
+    color: var(--primary-neon) !important;
+  }
+  
+  .leaflet-control-zoom a {
+    background: rgba(0, 0, 0, 0.7) !important;
+    color: white !important;
+    border-color: rgba(193, 58, 252, 0.5) !important;
+  }
+  
+  .leaflet-control-zoom a:hover {
+    background: rgba(193, 58, 252, 0.3) !important;
+  }
+  
+  /* Custom markers */
+  .custom-marker {
+    display: block;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 3px black;
+  }
+  
+  .marker-dancefloor {
+    color: #ff00ff;
+  }
+  
+  .marker-bar {
+    color: #00ffff;
+  }
+  
+  .marker-safezone {
+    color: #00ff00;
+  }
+  
+  .marker-friend {
+    color: #ffff00;
+  }
+  
+  /* Info overlay */
+  .map-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 320px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--primary-neon);
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(193, 58, 252, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s;
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(193, 58, 252, 0.3);
+  }
+  
+  .overlay-header h3 {
+    margin: 0;
+    color: var(--primary-neon);
+    text-shadow: 0 0 5px var(--primary-neon);
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .close-btn:hover {
+    color: var(--primary-neon);
+  }
+  
+  .overlay-content {
+    padding: 15px;
+  }
+  
+  /* Voting overlay */
+  .voting-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .vote-option {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+  
+  .vote-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: rgba(193, 58, 252, 0.3);
+    z-index: -1;
+  }
+  
+  .vote-label {
+    font-weight: bold;
+    z-index: 1;
+  }
+  
+  .vote-count {
+    margin-right: 10px;
+    z-index: 1;
+  }
+  
+  .vote-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .voting-time {
+    text-align: center;
+    font-style: italic;
+    opacity: 0.8;
+  }
+  
+  /* Rescue modal */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+  
+  .modal-content {
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalFadeIn 0.3s ease-out;
+  }
+  
+  @keyframes modalFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(193, 58, 252, 0.3);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .modal-header h2 i {
+    color: #f00;
+  }
+  
+  .close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .close-modal:hover {
+    color: var(--primary-neon);
+  }
+  
+  .modal-body {
+    padding-bottom: 15px;
+  }
+  
+  .important-text {
+    font-weight: bold;
+    color: #f00;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .rescue-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .rescue-option-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .rescue-option-btn i {
+    font-size: 1.5rem;
+    color: #f00;
+  }
+  
+  .rescue-option-btn:hover, .rescue-option-btn.selected {
+    background: rgba(255, 0, 0, 0.2);
+    border-color: #f00;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  }
+  
+  .rescue-note {
+    margin-bottom: 20px;
+  }
+  
+  .rescue-note label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .rescue-note textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    resize: vertical;
+  }
+  
+  /* Helper classes */
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .header-right {
+      flex-wrap: wrap;
+    }
+    
+    .event-info {
+      order: -1;
+      width: 100%;
+      margin-bottom: 10px;
+      border-right: none;
+      border-bottom: 1px solid rgba(193, 58, 252, 0.3);
+      padding-bottom: 10px;
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .map-section {
+      flex-direction: column;
+      height: auto;
+    }
+    
+    .map-controls {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid rgba(193, 58, 252, 0.3);
+      padding: 10px;
+    }
+    
+    .control-group {
+      margin-bottom: 10px;
+    }
+    
+    .map-container {
+      height: 70vh;
+    }
+    
+    .map-overlay {
+      width: 90%;
+      left: 5%;
+      right: 5%;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .map-header {
+      flex-direction: column;
+      padding: 10px;
+    }
+    
+    .header-left, .header-right {
+      width: 100%;
+    }
+    
+    .header-right {
+      margin-top: 10px;
+      justify-content: center;
+    }
+    
+    .rescue-options {
+      grid-template-columns: 1fr;
+    }
+
+    /* Zusätzliche Stile für die Stadtbezirke und kulturellen Features */
+
+.district-polygon {
+  transition: all 0.3s ease;
+}
+
+.district-tooltip {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--primary-neon);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(193, 58, 252, 0.5);
+}
+
+.district-popup h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--primary-neon);
+}
+
+.district-events-btn {
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* Kulturelles Overlay */
+.cultural-overlay {
+  width: 350px;
+}
+
+.cultural-events-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  border: 1px solid rgba(193, 58, 252, 0.2);
+}
+
+.cultural-event-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(193, 58, 252, 0.1);
+  transition: background 0.3s;
+}
+
+.cultural-event-item:hover {
+  background: rgba(193, 58, 252, 0.1);
+}
+
+.event-type-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(193, 58, 252, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.event-type-icon i {
+  font-size: 20px;
+  color: var(--primary-neon);
+  text-shadow: 0 0 5px var(--primary-neon);
+}
+
+.event-details {
+  flex: 1;
+}
+
+.event-name {
+  font-weight: bold;
+}
+
+.event-date, .event-type {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.event-action-btn {
+  background: rgba(193, 58, 252, 0.2);
+  border: none;
+  color: var(--primary-neon);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.event-action-btn:hover {
+  background: rgba(193, 58, 252, 0.4);
+  transform: scale(1.1);
+}
+
+.cultural-overlay-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.cultural-overlay-actions button {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.kulturamt-info {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  margin-top: 15px;
+}
+
+.kulturamt-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(193, 58, 252, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.kulturamt-logo i {
+  font-size: 20px;
+  color: var(--primary-neon);
+}
+
+.kulturamt-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Marker für kulturelle POIs */
+.marker-cultural {
+  color: #ff80ff; /* Auffälliges Pink für kulturelle Orte */
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 900px) {
+  .cultural-overlay {
+    width: 90%;
+    left: 5%;
+    right: 5%;
+  }
+}
+  }

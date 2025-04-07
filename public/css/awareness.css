@@ -1,0 +1,344 @@
+/**
+ * awareness.css - Stile für die Awareness-Funktionen
+ */
+
+/* Safe Zone Marker */
+.safe-zone-marker {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    border: 2px solid;
+    transition: all 0.3s ease;
+  }
+  
+  .safe-zone-marker.active {
+    border-color: #4caf50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+  }
+  
+  .safe-zone-marker.limited {
+    border-color: #ffdd57;
+    box-shadow: 0 0 10px rgba(255, 221, 87, 0.7);
+  }
+  
+  .safe-zone-marker.inactive {
+    border-color: #9e9e9e;
+  }
+  
+  .safe-zone-marker.closed {
+    border-color: #f44336;
+    opacity: 0.7;
+  }
+  
+  .safe-zone-marker i {
+    font-size: 20px;
+    color: var(--primary-neon);
+    text-shadow: 0 0 5px var(--primary-neon);
+  }
+  
+  /* Safe Zone Popup */
+  .safe-zone-popup {
+    min-width: 250px;
+  }
+  
+  .safe-zone-popup h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-neon);
+    border-bottom: 1px solid rgba(193, 58, 252, 0.3);
+    padding-bottom: 5px;
+  }
+  
+  .team-info {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid rgba(193, 58, 252, 0.2);
+  }
+  
+  .team-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+  }
+  
+  .team-status {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-left: 5px;
+  }
+  
+  .team-status.active {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+  }
+  
+  .team-status.limited {
+    background: rgba(255, 221, 87, 0.2);
+    color: #ffdd57;
+  }
+  
+  .team-status.closed {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
+  
+  .services-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .service-tag {
+    background: rgba(193, 58, 252, 0.15);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  
+  .send-sos-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+    transition: all 0.3s;
+  }
+  
+  .send-sos-btn:hover {
+    background-color: #45a049;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+  }
+  
+  .send-sos-btn:disabled {
+    background-color: #9e9e9e;
+    cursor: not-allowed;
+  }
+  
+  /* Awareness Team Member Marker */
+  .team-member-marker {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    border: 2px solid #4caf50;
+    transition: all 0.3s ease;
+  }
+  
+  .team-member-marker.responding {
+    border-color: #f44336;
+    animation: pulse-border 1.5s infinite;
+  }
+  
+  .team-member-marker.break {
+    border-color: #9e9e9e;
+    opacity: 0.7;
+  }
+  
+  .team-member-marker i {
+    font-size: 18px;
+    color: #ffffff;
+  }
+  
+  @keyframes pulse-border {
+    0% {
+      box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(244, 67, 54, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+    }
+  }
+  
+  /* SOS Modal */
+  .btn-sos {
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    padding: 10px 16px;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .btn-sos:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
+  }
+  
+  .sos-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .sos-option-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .sos-option-btn i {
+    font-size: 1.5rem;
+    color: #4caf50;
+  }
+  
+  .sos-option-btn:hover, .sos-option-btn.selected {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  }
+  
+  .sos-note {
+    margin-bottom: 20px;
+  }
+  
+  .sos-note label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .sos-note textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    resize: vertical;
+  }
+  
+  /* SOS Status Tracking */
+  .sos-status {
+    position: fixed;
+    bottom: -200px;
+    left: 20px;
+    right: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #4caf50;
+    border-radius: 8px 8px 0 0;
+    padding: 15px;
+    z-index: 2000;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .sos-status.active {
+    bottom: 0;
+  }
+  
+  .sos-status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .sos-status-header h3 {
+    margin: 0;
+    color: #4caf50;
+  }
+  
+  .sos-response-info {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .sos-response-info h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #4caf50;
+  }
+  
+  .responder-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .responder-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(76, 175, 80, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .responder-avatar i {
+    font-size: 20px;
+    color: #4caf50;
+  }
+  
+  .responder-details {
+    flex: 1;
+  }
+  
+  .responder-details p {
+    margin: 2px 0;
+  }
+  
+  .estimated-time {
+    font-weight: bold;
+    color: #ffdd57;
+  }
+  
+  /* Responsive Anpassungen */
+  @media (max-width: 768px) {
+    .sos-options {
+      grid-template-columns: 1fr;
+    }
+    
+    .sos-status {
+      left: 10px;
+      right: 10px;
+    }
+  }

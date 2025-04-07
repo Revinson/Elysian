@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Umfragen</title>
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/survey.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Dynamischer Hintergrund -->
+  <div class="bg-animation"></div>
+  <div id="particles-js"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="content-header">
+      <div class="user-welcome">
+        <h2>Elysian Umfragen</h2>
+        <p>Stimme ab und gestalte die Community</p>
+      </div>
+      
+      <div class="action-buttons">
+        <button id="back-dashboard-btn" class="neon-btn"><i class="fas fa-home"></i> Dashboard</button>
+      </div>
+    </header>
+
+    <!-- Aktive Umfragen -->
+    <section class="surveys-grid">
+      <h2><i class="fas fa-poll"></i> Aktive Umfragen</h2>
+      <div class="survey-list" id="survey-list">
+        <!-- Wird dynamisch mit JavaScript befüllt -->
+        <div class="loading-animation">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Umfrage Erstellen -->
+    <section class="create-survey-section">
+      <div class="grid-card">
+        <div class="card-header">
+          <h3><i class="fas fa-plus-circle"></i> Neue Umfrage erstellen</h3>
+          <div class="card-badge pulse">Creator</div>
+        </div>
+        <div class="card-content">
+          <form id="create-survey-form" class="survey-form">
+            <div class="form-group">
+              <label for="eventId">Event Referenz</label>
+              <select id="eventId" required>
+                <option value="" disabled selected>Event auswählen...</option>
+                <!-- Wird dynamisch mit JavaScript befüllt -->
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="question">Frage</label>
+              <input type="text" id="question" required placeholder="z.B. Welchen DJ wünschst du dir für das nächste Event?" />
+            </div>
+            
+            <div class="form-group">
+              <label for="options">Antwortmöglichkeiten</label>
+              <input type="text" id="options" placeholder="Option1, Option2, Option3, ..." required />
+              <small class="form-hint">Optionen durch Kommas trennen</small>
+            </div>
+            
+            <div class="options-preview" id="options-preview">
+              <!-- Wird dynamisch mit JavaScript befüllt -->
+            </div>
+            
+            <button type="submit" class="neon-btn btn-animated"><i class="fas fa-paper-plane"></i> Umfrage erstellen</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Results Modal -->
+  <div class="result-modal" id="result-modal">
+    <div class="modal-content">
+      <button class="close-modal" id="close-result-modal"><i class="fas fa-times"></i></button>
+      <h3>Umfrage-Ergebnisse</h3>
+      <div class="modal-body" id="result-content">
+        <!-- Wird dynamisch mit JavaScript befüllt -->
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/survey.js"></script>
+</body>
+</html>

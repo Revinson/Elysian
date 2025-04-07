@@ -1,0 +1,420 @@
+/* login.css - Mystischer Stil für die Elysian-Login-Seite */
+
+/* Import der Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Raleway', 'Trebuchet MS', sans-serif;
+  background: linear-gradient(135deg, #0a0010 0%, #12041a 50%, #0a0010 100%);
+  color: #e2e2e2;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Mystische Animation im Hintergrund */
+.mystical-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(114, 9, 183, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(58, 12, 163, 0.05) 0%, transparent 50%);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Magische Symbole im Hintergrund */
+.arcane-symbols {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.arcane-symbol {
+  position: absolute;
+  color: #7209b7;
+  font-size: 14px;
+  opacity: 0;
+  filter: blur(1px);
+}
+
+@keyframes fadeSymbol {
+  0% { opacity: 0; transform: translateY(10px); }
+  20%, 80% { opacity: 0.5; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+.login-container {
+  width: 90%;
+  max-width: 340px;
+  background: rgba(10, 0, 16, 0.8);
+  border: 1px solid #37084f;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 0 25px rgba(114, 9, 183, 0.25);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  margin: 0 auto;
+}
+
+/* Magische Kante */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+                            transparent 0%, 
+                            rgba(114, 9, 183, 0.5) 50%, 
+                            transparent 100%);
+}
+
+/* Innerer Glühen */
+.login-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, 
+                           rgba(114, 9, 183, 0.1) 0%, 
+                           transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Logo */
+.logo-header {
+  margin-bottom: 25px;
+  position: relative;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.elysian-logo {
+  max-width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 8px rgba(114, 9, 183, 0.5));
+}
+
+/* Auch die falsch geschriebene Version unterstützen */
+.elysien-logo {
+  max-width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 8px rgba(114, 9, 183, 0.5));
+}
+
+/* Magischer Kreis um das Logo */
+.magic-circle {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(114, 9, 183, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.magic-circle::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 1px solid rgba(114, 9, 183, 0.2);
+  border-radius: 50%;
+}
+
+.magic-circle::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border: 1px solid rgba(114, 9, 183, 0.1);
+  border-radius: 50%;
+}
+
+@keyframes rotateCircle {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.magic-circle {
+  animation: rotateCircle 120s linear infinite;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  font-family: 'Cinzel', serif;
+  font-weight: 500;
+  color: #d4b8ff;
+  text-shadow: 0 0 10px rgba(114, 9, 183, 0.4);
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+}
+
+.login-container h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  height: 1px;
+  width: 80px;
+  background: linear-gradient(90deg, 
+                            transparent 0%, 
+                            #7209b7 50%, 
+                            transparent 100%);
+}
+
+/* Fehlermeldung */
+.error-message {
+  background: rgba(150, 0, 0, 0.2);
+  color: #ff4444;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border-left: 3px solid #ff4444;
+  text-align: left;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.error-message::before {
+  content: '\f071';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.error-message p {
+  margin: 0;
+  padding-left: 25px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Formular */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  position: relative;
+}
+
+.login-form label {
+  margin: 12px 0 6px;
+  font-weight: 500;
+  color: #a395b5;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  font-family: 'Cinzel', serif;
+}
+
+.input-wrap {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7209b7;
+  opacity: 0.8;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border-radius: 6px;
+  border: 1px solid rgba(87, 6, 124, 0.5);
+  outline: none;
+  font-size: 1rem;
+  background: rgba(18, 4, 26, 0.6);
+  color: #e2e2e2;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+}
+
+.login-form input:focus {
+  box-shadow: 0 0 0 2px rgba(114, 9, 183, 0.25);
+  background: rgba(26, 6, 54, 0.4);
+  border-color: #57067c;
+}
+
+.login-form input::placeholder {
+  color: #6d617a;
+  opacity: 0.7;
+}
+
+/* Magischer Login Button */
+.login-form button {
+  background: rgba(87, 6, 124, 0.8);
+  color: #e2e2e2;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  margin-top: 15px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(114, 9, 183, 0.3);
+}
+
+.login-form button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+                            transparent 0%, 
+                            rgba(255, 255, 255, 0.1) 50%, 
+                            transparent 100%);
+  transition: left 0.6s ease;
+}
+
+.login-form button:hover {
+  background: rgba(114, 9, 183, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(114, 9, 183, 0.4);
+}
+
+.login-form button:hover::before {
+  left: 100%;
+}
+
+/* Link-Bereich unten */
+.login-links {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.login-links a {
+  color: #7209b7;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.login-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: #7209b7;
+  transition: width 0.3s ease;
+}
+
+.login-links a:hover {
+  color: #9b42d1;
+}
+
+.login-links a:hover::after {
+  width: 100%;
+}
+
+.divider {
+  color: #a395b5;
+}
+
+/* Button-Pulse-Animation */
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(114, 9, 183, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(114, 9, 183, 0.5);
+  }
+}
+
+.btn-animated {
+  animation: pulse 2s infinite;
+}
+
+/* Shake-Animation für Fehlermeldungen */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Particles.js Container */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 25px 20px;
+    margin: 20px;
+  }
+  
+  .login-form input {
+    padding: 10px 10px 10px 35px;
+    font-size: 0.95rem;
+  }
+  
+  .login-form button {
+    padding: 10px 15px;
+  }
+}

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Registrierung</title>
+  <link rel="stylesheet" href="./css/register.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Dynamischer Hintergrund mit Sternen -->
+  <div class="mystical-bg"></div>
+  <div id="particles-js"></div>
+  <div class="stars-container"></div>
+
+  <div class="register-container">
+    <div class="logo-header">
+      <img src="./images/elysian_logo.png" alt="Elysian Logo" class="elysian-logo" />
+      <div class="rune-circle"></div>
+    </div>
+
+    <h2>Werde Teil von Elysian</h2>
+    <div id="register-error" class="error-message hidden"></div>
+
+    <!-- Progressbar -->
+    <div class="progress-bar">
+      <div id="progress-fill" class="progress-fill" style="width: 20%;"></div>
+    </div>
+
+    <!-- STEP 1: Nutzertyp wählen -->
+    <div id="step-0" class="step">
+      <h3><i class="fas fa-user-tag"></i> 1. Wähle deinen Nutzertyp</h3>
+      <p>Wie möchtest du Elysian nutzen?</p>
+      <div class="user-type-grid">
+        <div class="user-type-card" id="user-type-creator">
+          <div class="card-glow"></div>
+          <i class="fas fa-paint-brush user-type-icon"></i>
+          <h4>Creator</h4>
+          <p>Entfalte deine Kreativität und erschaffe Events.</p>
+        </div>
+        <div class="user-type-card" id="user-type-guest">
+          <div class="card-glow"></div>
+          <i class="fas fa-star user-type-icon"></i>
+          <h4>Elysian</h4>
+          <p>Erlebe die Magie unserer Community.</p>
+        </div>
+        <div class="user-type-card" id="user-type-hq">
+          <div class="card-glow"></div>
+          <i class="fas fa-crown user-type-icon"></i>
+          <h4>Elysian HQ</h4>
+          <p>Sei Teil unseres Kernteams.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Team wählen -->
+    <div id="step-1" class="step hidden">
+      <h3><i class="fas fa-users"></i> 2. Wähle dein Team</h3>
+      <p>Welcher Vibe passt zu dir?</p>
+      <div class="team-grid">
+        <div class="team-card" id="team-pulse">
+          <div class="card-glow"></div>
+          <i class="fas fa-bolt team-icon"></i>
+          <h4>Pulse</h4>
+          <p>Schneller Beat, pure Energie.</p>
+        </div>
+        <div class="team-card" id="team-flux">
+          <div class="card-glow"></div>
+          <i class="fas fa-water team-icon"></i>
+          <h4>Flux</h4>
+          <p>Tiefer Flow, verträumter Vibe.</p>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn back-btn" id="btn-back-step0"><i class="fas fa-arrow-left"></i> Zurück</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Event-Präferenzen -->
+    <div id="step-2" class="step hidden">
+      <h3><i class="fas fa-calendar-check"></i> 3. Deine Event-Präferenzen</h3>
+
+      <!-- Team-spezifische Fragen -->
+      <div id="pulse-questions" class="team-questions hidden">
+        <label for="pulse-q1">Bevorzugtes Musiktempo (BPM)?</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-music input-icon"></i>
+          <input type="text" id="pulse-q1" placeholder="z.B. 140 BPM" />
+        </div>
+        <label for="pulse-q2">Harte Drops oder fließende Übergänge?</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-volume-up input-icon"></i>
+          <input type="text" id="pulse-q2" placeholder="z.B. Harte Drops" />
+        </div>
+      </div>
+      <div id="flux-questions" class="team-questions hidden">
+        <label for="flux-q1">Melodisch oder minimal?</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-wave-square input-icon"></i>
+          <input type="text" id="flux-q1" placeholder="z.B. Melodisch" />
+        </div>
+        <label for="flux-q2">Psychedelische Klänge oder sphärisch?</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-moon input-icon"></i>
+          <input type="text" id="flux-q2" placeholder="z.B. Sphärisch" />
+        </div>
+      </div>
+
+      <h4>Welche Events rufen dich?</h4>
+      <div class="event-type-options">
+        <label class="radio-label">
+          <input type="radio" name="eventType" value="club" />
+          <div class="radio-custom"></div>
+          <span>Clubnächte – pulsierende Nächte in dunklen Kellern</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="eventType" value="festival" />
+          <div class="radio-custom"></div>
+          <span>Festivals – grenzenlose Ekstase unter freiem Himmel</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="eventType" value="rave" />
+          <div class="radio-custom"></div>
+          <span>Raves – roher, ungefilterter Ausdruck der Freiheit</span>
+        </label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn back-btn" id="btn-back-step1"><i class="fas fa-arrow-left"></i> Zurück</button>
+        <button class="btn cta-btn" id="btn-to-step-optional-role">Weiter <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Rolle entdecken? -->
+    <div id="step-3" class="step hidden">
+      <h3><i class="fas fa-question-circle"></i> 4. Deine Rolle entdecken?</h3>
+      <p>Möchtest du unseren Fragenkatalog durchlaufen, um herauszufinden, welcher Elysian-Archetyp in dir steckt?</p>
+      
+      <div class="role-choice-cards">
+        <div class="role-choice-card" id="btn-yes-goToRoleQuiz">
+          <div class="card-glow"></div>
+          <i class="fas fa-check-circle"></i>
+          <h4>Ja, los geht's!</h4>
+          <p>Finde deinen einzigartigen Archetyp</p>
+        </div>
+        <div class="role-choice-card" id="btn-skip-roleQuiz">
+          <div class="card-glow"></div>
+          <i class="fas fa-times-circle"></i>
+          <h4>Nein, später</h4>
+          <p>Du kannst jederzeit nachholen</p>
+        </div>
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn back-btn" id="btn-back-roleIntro"><i class="fas fa-arrow-left"></i> Zurück</button>
+      </div>
+    </div>
+
+    <!-- STEP 4A: Rollen-Quiz -->
+    <div id="step-3A" class="step hidden">
+      <h3><i class="fas fa-brain"></i> Dein Rollen-Quiz</h3>
+      <p>Beschreibe kurz deine Antworten:</p>
+
+      <div class="quiz-questions">
+        <div class="quiz-question">
+          <label for="quiz-q1">1. Welcher Pfad ruft dich durch die Nacht?</label>
+          <textarea id="quiz-q1" rows="2" placeholder="(Beschreibe, wie du dich fühlst)"></textarea>
+        </div>
+        
+        <div class="quiz-question">
+          <label for="quiz-q2">2. Wessen Energie versprühst du, wenn der Bass einsetzt?</label>
+          <textarea id="quiz-q2" rows="2" placeholder="(z.B. Verbinder, Wettkämpfer...)"></textarea>
+        </div>
+        
+        <div class="quiz-question">
+          <label for="quiz-q3">3. Welche Sehnsucht hat dich in späten Stunden überwältigt?</label>
+          <textarea id="quiz-q3" rows="2" placeholder="(z.B. Freiheit, Verbindung...)"></textarea>
+        </div>
+        
+        <div class="quiz-question">
+          <label for="quiz-q4">4. Welche Art von Techno-Event zieht dich an und warum?</label>
+          <textarea id="quiz-q4" rows="2" placeholder="(z.B. Warehouse-Raves, weil...)"></textarea>
+        </div>
+        
+        <div class="quiz-question">
+          <label for="quiz-q5">5. Wo findest du Ausgleich zwischen Ekstase und Stille?</label>
+          <textarea id="quiz-q5" rows="2" placeholder="(z.B. Natur, Meditation...)"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn back-btn" id="btn-back-roleQuiz"><i class="fas fa-arrow-left"></i> Zurück</button>
+        <button class="btn cta-btn" id="btn-finish-roleQuiz">Weiter <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Account-Daten -->
+    <div id="step-4" class="step hidden">
+      <h3><i class="fas fa-user-plus"></i> 5. Erstelle deinen Account</h3>
+      
+      <div class="form-group">
+        <label for="username">Benutzername:</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="username" required placeholder="Dein Username" />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">E-Mail:</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" id="email" required placeholder="deine@email.de" />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Passwort:</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" required placeholder="••••••••" />
+          <i class="fas fa-eye toggle-password" id="toggle-password"></i>
+        </div>
+        <div class="password-strength-container">
+          <div class="password-strength-meter">
+            <div id="password-strength" class="strength-bar"></div>
+          </div>
+          <div id="password-strength-text" class="password-strength-text">Passwort-Stärke</div>
+        </div>
+        <small class="password-hint">Mind. 8 Zeichen mit Groß-/Kleinbuchstaben, Zahlen und Sonderzeichen</small>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn back-btn" id="btn-back-step3-or-3A"><i class="fas fa-arrow-left"></i> Zurück</button>
+        <button class="btn cta-btn" id="btn-to-step5">Weiter <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 6: Persönliche Daten -->
+    <div id="step-5" class="step hidden">
+      <h3><i class="fas fa-id-card"></i> 6. Deine persönlichen Daten</h3>
+      
+      <div class="form-group">
+        <label for="age">Alter:</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-birthday-cake input-icon"></i>
+          <input type="number" id="age" placeholder="z.B. 25" min="18" max="99" />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="gender">Geschlecht:</label>
+        <div class="input-icon-wrap select-wrapper">
+          <i class="fas fa-venus-mars input-icon"></i>
+          <select id="gender">
+            <option value="">(Bitte wählen)</option>
+            <option value="m">Männlich</option>
+            <option value="w">Weiblich</option>
+            <option value="divers">Divers</option>
+            <option value="none">Keine Angabe</option>
+          </select>
+          <i class="fas fa-chevron-down select-arrow"></i>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="location">Stadt/Region:</label>
+        <div class="input-icon-wrap">
+          <i class="fas fa-map-marker-alt input-icon"></i>
+          <input type="text" id="location" placeholder="z.B. Berlin, Hamburg..." />
+        </div>
+      </div>
+
+      <div class="privacy-note">
+        <input type="checkbox" id="privacy-checkbox" required />
+        <label for="privacy-checkbox" class="checkbox-label">Ich akzeptiere die <a href="#">Datenschutzbestimmungen</a> und <a href="#">Nutzungsbedingungen</a>.</label>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn back-btn" id="btn-back-step4"><i class="fas fa-arrow-left"></i> Zurück</button>
+        <button class="btn cta-btn btn-animated" id="btn-submit-registration"><i class="fas fa-check-circle"></i> Abschicken</button>
+      </div>
+    </div>
+
+    <!-- Success Message - Initially Hidden -->
+    <div id="success-message" class="step hidden">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Registrierung erfolgreich!</h3>
+      <p>Willkommen bei Elysian. Du wirst in wenigen Sekunden weitergeleitet...</p>
+      <div id="user-archetype" class="archetype-result hidden">
+        <h4>Dein Elysian-Archetyp:</h4>
+        <div class="archetype-badge">
+          <i class="fas fa-user-astronaut"></i>
+          <span id="archetype-name">Explorer</span>
+        </div>
+        <p id="archetype-description">Du bist ein Entdecker der Nacht, immer auf der Suche nach neuen Klängen und Erfahrungen.</p>
+      </div>
+      <div class="cosmic-loader">
+        <div class="cosmic-loader__galaxy"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/register.js"></script>
+</body>
+</html>

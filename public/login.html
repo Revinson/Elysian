@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Login</title>
+  <link rel="stylesheet" href="./css/login.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Mystischer Hintergrund -->
+  <div class="mystical-bg"></div>
+  <div id="particles-js"></div>
+  
+  <!-- Mystische Symbole im Hintergrund -->
+  <div class="arcane-symbols"></div>
+
+  <div class="login-container">
+    <div class="logo-header">
+      <img src="./images/elysian_logo.png" alt="Elysian Logo" class="elysian-logo">
+      <!-- Magischer Kreis um das Logo -->
+      <div class="magic-circle"></div>
+    </div>
+
+    <h2>Willkommen zurück!</h2>
+
+    <!-- Fehlermeldung -->
+    <div id="login-error" class="error-message hidden"></div>
+
+    <form id="login-form" class="login-form">
+      <label for="username">E-Mail oder Benutzername</label>
+      <div class="input-wrap">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="username" required placeholder="deine@email.de" />
+      </div>
+
+      <label for="password">Passwort</label>
+      <div class="input-wrap">
+        <i class="fas fa-lock input-icon"></i>
+        <input type="password" id="password" required placeholder="••••••••" />
+      </div>
+
+      <button type="submit" class="btn-animated">Einloggen <i class="fas fa-sign-in-alt"></i></button>
+    </form>
+
+    <div class="login-links">
+      <a href="#forgot-password" class="pw-forgot">Passwort vergessen?</a>
+      <span class="divider">|</span>
+      <a href="register.html" class="register-link">Neu hier? Jetzt registrieren</a>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    // Initialisiere Particles.js
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof particlesJS !== 'undefined') {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 40, density: { enable: true, value_area: 800 } },
+            color: { value: "#7209b7" },
+            shape: { type: "circle" },
+            opacity: { value: 0.3, random: true },
+            size: { value: 2, random: true },
+            line_linked: {
+              enable: true,
+              distance: 150,
+              color: "#7209b7",
+              opacity: 0.15,
+              width: 1
+            },
+            move: {
+              enable: true,
+              speed: 0.8,
+              direction: "none",
+              random: true,
+              straight: false,
+              out_mode: "out"
+            }
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: { enable: true, mode: "grab" },
+              onclick: { enable: true, mode: "push" }
+            }
+          }
+        });
+      }
+      
+      // Mystische Symbole erstellen
+      createArcaneSymbols();
+    });
+    
+    // Erstellt die mystischen Symbole im Hintergrund
+    function createArcaneSymbols() {
+      const arcaneContainer = document.querySelector('.arcane-symbols');
+      if (!arcaneContainer) return;
+      
+      const symbols = ['✧', '⊹', '✦', '⋆', '⊹', '★', '✵', '✦', '⋇', '✧', '⊹', '✵'];
+      const symbolCount = 30;
+      
+      for (let i = 0; i < symbolCount; i++) {
+        const symbol = document.createElement('div');
+        symbol.className = 'arcane-symbol';
+        symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        
+        // Zufällige Position
+        symbol.style.left = `${Math.random() * 100}%`;
+        symbol.style.top = `${Math.random() * 100}%`;
+        
+        // Zufällige Größe
+        const size = Math.random() * 16 + 8;
+        symbol.style.fontSize = `${size}px`;
+        
+        // Zufällige Animation-Verzögerung
+        const delay = Math.random() * 10;
+        const duration = Math.random() * 5 + 5;
+        symbol.style.animation = `fadeSymbol ${duration}s infinite ${delay}s`;
+        
+        arcaneContainer.appendChild(symbol);
+      }
+    }
+  </script>
+  <script src="./js/login.js"></script>
+</body>
+</html>

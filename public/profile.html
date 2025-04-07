@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Elysian – Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/profile.css">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="bg-animation"></div>
+  <div id="particles-js"></div>
+
+  <header class="profile-header">
+    <h1 class="brand-logo animate-glitch">ELYSIAN</h1>
+    <button id="back-dashboard-btn" class="neon-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  </header>
+
+  <section class="profile-section animate-fadeIn">
+    <div class="profile-pic-area">
+      <div class="profile-pic-container">
+        <img src="./images/default-avatar.png" alt="Profile Picture" class="profile-pic" />
+        <div class="profile-pic-overlay">
+          <button id="change-pic-btn" class="pic-edit-btn"><i class="fas fa-camera"></i></button>
+        </div>
+      </div>
+      <p id="profile-team" class="team-badge">Team PULSE</p>
+    </div>
+    
+    <div class="profile-info neon-card">
+      <h2 id="profile-username">Username: NeonRaver</h2>
+      <p id="profile-role">Role: Elysian</p>
+      <p id="profile-age">Age: 25</p>
+
+      <div class="level-display">
+        <span>Level <span id="profile-level-num" class="neon-text">4</span></span>
+        <div class="xp-bar-container">
+          <div id="xp-bar-fill" class="xp-bar-fill" style="width: 70%;"></div>
+        </div>
+        <span class="xp-text">XP: <span id="profile-xp">70</span>/<span id="profile-xpnext">100</span></span>
+      </div>
+
+      <p id="profile-bio">Bio: <span>Techno enthusiast living for the night. Bass makes me feel alive!</span></p>
+
+      <!-- Archetype section - shown if user has completed role quiz -->
+      <div id="archetype-section" class="archetype-section hidden">
+        <h3>Your Archetype</h3>
+        <div class="archetype-container">
+          <div class="archetype-icon"><i class="fas fa-chess-knight"></i></div>
+          <div class="archetype-details">
+            <h4 id="archetype-name">Rhythm Hunter</h4>
+            <p id="archetype-description">You seek the perfect beat, always hunting for the next rhythm that will set your soul on fire.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Take quiz section - shown if user hasn't completed role quiz -->
+      <div id="take-quiz-section" class="take-quiz-section hidden">
+        <h3>Discover Your Archetype</h3>
+        <p>Complete the role quiz to discover your unique Elysian archetype!</p>
+        <button id="take-quiz-btn" class="neon-btn btn-animated"><i class="fas fa-question-circle"></i> Take the Quiz</button>
+      </div>
+
+      <div class="profile-actions">
+        <button id="add-friend-btn" class="neon-btn"><i class="fas fa-user-plus"></i> Add Friend</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="profile-extras animate-slideUp">
+    <div class="extras-card neon-card">
+      <h3><i class="fas fa-trophy"></i> Achievements</h3>
+      <div class="scroll-list" id="achievements-list">
+        <p>• First Login</p>
+        <p>• Completed Profile</p>
+      </div>
+    </div>
+    <div class="extras-card neon-card">
+      <h3><i class="fas fa-users"></i> Friends</h3>
+      <div class="scroll-list" id="friends-list">
+        <p>• DJ_Neon92</p>
+        <p>• TechnoQueen</p>
+      </div>
+    </div>
+    <div class="extras-card neon-card">
+      <h3><i class="fas fa-calendar-check"></i> Recent Events</h3>
+      <div class="scroll-list" id="events-list">
+        <div class="mini-event">
+          <div class="mini-event-date">
+            <span class="day">15</span>
+            <span class="month">FEB</span>
+          </div>
+          <div class="mini-event-details">
+            <h4>Neon Nights</h4>
+            <p>Underground Club • Attended</p>
+          </div>
+        </div>
+        <div class="mini-event">
+          <div class="mini-event-date">
+            <span class="day">22</span>
+            <span class="month">JAN</span>
+          </div>
+          <div class="mini-event-details">
+            <h4>Bass Ritual</h4>
+            <p>Warehouse 7 • Attended</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Role Quiz Modal -->
+  <div id="role-quiz-modal" class="modal hidden">
+    <div class="modal-content neon-card">
+      <div class="modal-header">
+        <h2>Discover Your Archetype</h2>
+        <button id="close-quiz-modal" class="close-modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="role-quiz-form">
+          <div class="quiz-question">
+            <label for="quiz-q1">1. Which path calls to you through the night?</label>
+            <textarea id="quiz-q1" rows="2" placeholder="(Describe how you feel)" required></textarea>
+          </div>
+          
+          <div class="quiz-question">
+            <label for="quiz-q2">2. Whose energy do you radiate most when the bass drops?</label>
+            <textarea id="quiz-q2" rows="2" placeholder="(e.g. Connector, Competitor...)" required></textarea>
+          </div>
+          
+          <div class="quiz-question">
+            <label for="quiz-q3">3. What longing has overwhelmed you in the late hours?</label>
+            <textarea id="quiz-q3" rows="2" required></textarea>
+          </div>
+          
+          <div class="quiz-question">
+            <label for="quiz-q4">4. What type of techno event draws you in and why?</label>
+            <textarea id="quiz-q4" rows="2" required></textarea>
+          </div>
+          
+          <div class="quiz-question">
+            <label for="quiz-q5">5. Where do you find balance between ecstasy and silence?</label>
+            <textarea id="quiz-q5" rows="2" required></textarea>
+          </div>
+          
+          <button type="submit" class="neon-btn btn-animated">Discover My Archetype</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/profile.js"></script>
+  <script>
+    // Initialize particles.js
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof particlesJS !== 'undefined') {
+        particlesJS("particles-js", {
+          "particles": {
+            "number": {
+              "value": 30,
+              "density": {
+                "enable": true,
+                "value_area": 800
+              }
+            },
+            "color": {
+              "value": "#c13afc"
+            },
+            "shape": {
+              "type": "circle",
+            },
+            "opacity": {
+              "value": 0.5,
+              "random": true,
+            },
+            "size": {
+              "value": 3,
+              "random": true,
+            },
+            "line_linked": {
+              "enable": true,
+              "distance": 150,
+              "color": "#c13afc",
+              "opacity": 0.2,
+              "width": 1
+            },
+            "move": {
+              "enable": true,
+              "speed": 1,
+              "direction": "none",
+              "random": true,
+              "straight": false,
+              "out_mode": "out",
+              "bounce": false,
+            }
+          },
+          "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+              "onhover": {
+                "enable": true,
+                "mode": "grab"
+              },
+              "onclick": {
+                "enable": true,
+                "mode": "push"
+              },
+              "resize": true
+            },
+            "modes": {
+              "grab": {
+                "distance": 140,
+                "line_linked": {
+                  "opacity": 0.6
+                }
+              },
+              "push": {
+                "particles_nb": 3
+              }
+            }
+          },
+          "retina_detect": true
+        });
+      }
+    });
+  </script>
+</body>
+</html>

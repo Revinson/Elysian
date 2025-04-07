@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elysian – Event-Karte</title>
+  
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/map.css">
+  <link rel="stylesheet" href="./css/awareness.css"> <!-- Neue Awareness-Stile -->
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+   crossorigin=""/>
+   
+  <!-- Font Awesome für Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+   crossorigin=""></script>
+   
+ <!-- Canvas-Performance-Fix für Leaflet Heatmap -->
+<script src="./js/leaflet-canvas-fix.js"></script>
+
+<!-- Heat.js für Heatmaps -->
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+ 
+   <!-- Heat.js für Heatmaps -->
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+</head>
+<body>
+  <!-- Dynamischer Hintergrund mit Grid-Effekt -->
+  <div class="bg-animation"></div>
+  
+  <!-- Animierte Partikel -->
+  <div id="particles-js"></div>
+
+  <header class="map-header">
+    <div class="header-left">
+      <h1 class="brand-logo">
+        <span class="animate-glitch">ELYSIAN</span>
+        <span class="subtitle">EVENT MAP</span>
+      </h1>
+    </div>
+    <div class="header-right">
+      <div class="event-info">
+        <div class="event-name">
+          <i class="fas fa-calendar-alt neon-text"></i>
+          <span id="current-event">Techno Friday @ Warehouse 7</span>
+        </div>
+        <div class="event-time">
+          <i class="fas fa-clock neon-text"></i>
+          <span id="event-time">22:00 - 10:00</span>
+        </div>
+      </div>
+      <button id="forum-btn" class="neon-btn"><i class="fas fa-comments"></i> Forum</button>
+      <button id="dashboard-btn" class="neon-btn"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+      <button id="logout-btn" class="neon-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </header>
+
+  <section class="map-section">
+    <div class="map-controls">
+      <div class="control-group">
+        <h3>Kartenansicht</h3>
+        <button id="view-all" class="map-btn active"><i class="fas fa-globe"></i> Alles zeigen</button>
+        <button id="view-dancefloors" class="map-btn"><i class="fas fa-music"></i> Dancefloors</button>
+        <button id="view-bars" class="map-btn"><i class="fas fa-glass-martini-alt"></i> Bars</button>
+        <button id="view-safezones" class="map-btn"><i class="fas fa-shield-alt"></i> Safezones</button>
+      </div>
+      
+      <div class="control-group">
+        <h3>Live-Daten</h3>
+        <button id="toggle-heatmap" class="map-btn"><i class="fas fa-fire"></i> Heatmap</button>
+        <button id="toggle-friends" class="map-btn"><i class="fas fa-user-friends"></i> Freunde</button>
+        <button id="toggle-voting" class="map-btn"><i class="fas fa-poll"></i> Live-Voting</button>
+        <button id="toggle-awareness" class="map-btn"><i class="fas fa-hands-helping"></i> Awareness-Teams</button>
+      </div>
+      
+      <div class="control-group">
+        <h3>Notfall</h3>
+        <button id="rescue-btn" class="btn-rescue"><i class="fas fa-exclamation-triangle"></i> Hilfe anfordern</button>
+        <button id="sos-btn" class="btn-sos"><i class="fas fa-hands-helping"></i> SOS an Awareness-Team</button>
+      </div>
+      
+      <div class="friends-list-container">
+        <h3>Freunde auf dem Event</h3>
+        <div class="friends-list" id="online-friends">
+          <!-- Hier werden Freunde dynamisch eingetragen -->
+          <div class="friend-item online">
+            <img src="./images/elysian_logo.png" alt="Avatar" class="friend-avatar">
+            <div class="friend-info">
+              <span class="friend-name">TechnoTim</span>
+              <span class="friend-location">Main Floor</span>
+            </div>
+            <button class="friend-locate-btn"><i class="fas fa-map-marker-alt"></i></button>
+          </div>
+          <div class="friend-item online">
+            <img src="./images/elysian_logo.png" alt="Avatar" class="friend-avatar">
+            <div class="friend-info">
+              <span class="friend-name">BassQueen</span>
+              <span class="friend-location">Bar 2</span>
+            </div>
+            <button class="friend-locate-btn"><i class="fas fa-map-marker-alt"></i></button>
+          </div>
+          <div class="friend-item offline">
+            <img src="./images/elysian_logo.png" alt="Avatar" class="friend-avatar">
+            <div class="friend-info">
+              <span class="friend-name">NeonDancer</span>
+              <span class="friend-location">Offline</span>
+            </div>
+            <button class="friend-locate-btn" disabled><i class="fas fa-map-marker-alt"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="map-container">
+      <div id="event-map"></div>
+      
+      <!-- Overlay für das aktuell ausgewählte Element -->
+      <div id="selected-item-info" class="map-overlay hidden">
+        <div class="overlay-header">
+          <h3 id="selected-title">Hauptbühne</h3>
+          <button id="close-overlay" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="overlay-content">
+          <div id="selected-details">
+            <!-- Details werden dynamisch eingetragen -->
+          </div>
+          <div id="selected-actions">
+            <!-- Aktionen werden dynamisch eingetragen -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Voting Overlay -->
+      <div id="voting-overlay" class="map-overlay hidden">
+        <div class="overlay-header">
+          <h3>Live-Voting: Next Track Style</h3>
+          <button id="close-voting" class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="overlay-content">
+          <div class="voting-options">
+            <div class="vote-option">
+              <div class="vote-progress" style="width: 75%"></div>
+              <div class="vote-label">Hard Techno</div>
+              <div class="vote-count">75%</div>
+              <button class="vote-btn neon-btn">Vote</button>
+            </div>
+            <div class="vote-option">
+              <div class="vote-progress" style="width: 15%"></div>
+              <div class="vote-label">Melodic Techno</div>
+              <div class="vote-count">15%</div>
+              <button class="vote-btn neon-btn">Vote</button>
+            </div>
+            <div class="vote-option">
+              <div class="vote-progress" style="width: 10%"></div>
+              <div class="vote-label">Tech House</div>
+              <div class="vote-count">10%</div>
+              <button class="vote-btn neon-btn">Vote</button>
+            </div>
+          </div>
+          <div class="voting-time">
+            <i class="fas fa-clock"></i> Voting endet in: <span id="voting-timer">2:45</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rettungs-Modal -->
+  <div id="rescue-modal" class="modal hidden">
+    <div class="modal-content neon-card">
+      <div class="modal-header">
+        <h2><i class="fas fa-exclamation-triangle"></i> Hilfe anfordern</h2>
+        <button id="close-rescue-modal" class="close-modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="important-text">Dein Standort wird an das Security-Team übermittelt.</p>
+        
+        <div class="rescue-options">
+          <button class="rescue-option-btn" data-type="medical">
+            <i class="fas fa-medkit"></i>
+            <span>Medizinischer Notfall</span>
+          </button>
+          <button class="rescue-option-btn" data-type="security">
+            <i class="fas fa-shield-alt"></i>
+            <span>Security / Belästigung</span>
+          </button>
+          <button class="rescue-option-btn" data-type="friend">
+            <i class="fas fa-users"></i>
+            <span>Freunde benachrichtigen</span>
+          </button>
+          <button class="rescue-option-btn" data-type="exit">
+            <i class="fas fa-door-open"></i>
+            <span>Sichere Begleitung zum Ausgang</span>
+          </button>
+        </div>
+        
+        <div class="rescue-note">
+          <label for="rescue-message">Optionale Nachricht:</label>
+          <textarea id="rescue-message" placeholder="Füge hier Details zu deiner Situation hinzu..."></textarea>
+        </div>
+        
+        <button id="send-rescue" class="neon-btn btn-animated"><i class="fas fa-paper-plane"></i> Hilferuf senden</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOS-Modal für Awareness-Team -->
+  <div id="sos-modal" class="modal hidden">
+    <div class="modal-content neon-card">
+      <div class="modal-header">
+        <h2><i class="fas fa-hands-helping"></i> SOS an Awareness-Team</h2>
+        <button id="close-sos-modal" class="close-modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="important-text">Dein Standort wird an das nächste Awareness-Team übermittelt.</p>
+        
+        <div class="sos-options">
+          <button class="sos-option-btn" data-type="escort">
+            <i class="fas fa-walking"></i>
+            <span>Begleitung anfordern</span>
+          </button>
+          <button class="sos-option-btn" data-type="harassment">
+            <i class="fas fa-exclamation"></i>
+            <span>Belästigung melden</span>
+          </button>
+          <button class="sos-option-btn" data-type="medical-minor">
+            <i class="fas fa-band-aid"></i>
+            <span>Leichte medizinische Hilfe</span>
+          </button>
+          <button class="sos-option-btn" data-type="rest">
+            <i class="fas fa-bed"></i>
+            <span>Ruhezone aufsuchen</span>
+          </button>
+        </div>
+        
+        <div class="sos-note">
+          <label for="sos-message">Nachricht an das Team:</label>
+          <textarea id="sos-message" placeholder="Beschreibe deine Situation..."></textarea>
+        </div>
+        
+        <button id="send-sos" class="neon-btn btn-animated"><i class="fas fa-paper-plane"></i> SOS senden</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kultur-Events Overlay -->
+  <div id="cultural-events-overlay" class="map-overlay cultural-overlay hidden">
+    <div class="overlay-header">
+      <h3><i class="fas fa-theater-masks"></i> Kulturevents in Essen</h3>
+      <button id="close-cultural-overlay" class="close-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="overlay-content">
+      <div class="cultural-events-list">
+        <!-- Wird dynamisch gefüllt -->
+      </div>
+      <div class="cultural-overlay-actions">
+        <button id="show-all-events" class="neon-btn"><i class="fas fa-list"></i> Alle Events anzeigen</button>
+        <button id="filter-events" class="neon-btn"><i class="fas fa-filter"></i> Nach Typ filtern</button>
+      </div>
+      <div class="kulturamt-info">
+        <div class="kulturamt-logo">
+          <i class="fas fa-landmark"></i>
+        </div>
+        <div class="kulturamt-text">
+          Daten bereitgestellt vom Kulturamt Essen
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Particles.js und Haupt-Skripte -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="./js/map.js"></script>
+  <script src="./js/map-advanced.js"></script>
+  
+  <!-- Neue Awareness-Funktionen -->
+  <script src="./js/live-pulse.js"></script>
+  <script src="./js/awareness-integration.js"></script>
+</body>
+</html>
