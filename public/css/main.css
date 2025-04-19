@@ -333,3 +333,9 @@ input:focus, select:focus, textarea:focus {
   background: var(--primary-neon-glow);
 }
 
+/* Add this at the top of your CSS file */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 120px; /* Increased padding to ensure the header doesn't overlap */
+}
+

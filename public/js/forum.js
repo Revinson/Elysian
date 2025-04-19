@@ -9,6 +9,40 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
+  // Add demo mode notification
+  const forumContent = document.querySelector('.forum-content');
+  if (forumContent) {
+    const demoBanner = document.createElement('div');
+    demoBanner.className = 'demo-notice';
+    demoBanner.innerHTML = `
+      <i class="fas fa-info-circle"></i> 
+      <span>Das Forum läuft aktuell im Demo-Modus. Daten werden im lokalen Speicher deines Browsers gespeichert.</span>
+    `;
+    forumContent.insertBefore(demoBanner, forumContent.firstChild);
+    
+    // Add style for the banner
+    const style = document.createElement('style');
+    style.textContent = `
+      .demo-notice {
+        background-color: rgba(var(--accent-color-rgb), 0.15);
+        border: 1px solid var(--accent-color);
+        color: var(--text-color);
+        padding: 10px 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+      }
+      .demo-notice i {
+        margin-right: 10px;
+        color: var(--accent-color);
+        font-size: 1.2rem;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   // DOM-Elemente
   const threadsContainer = document.getElementById('threads-container');
   const newThreadBtn = document.getElementById('new-thread-btn');
@@ -29,6 +63,38 @@ document.addEventListener('DOMContentLoaded', () => {
   let threads = [];
   let filteredThreads = [];
   let isLoading = false;
+
+  // Local Storage functions for persistence
+  function saveThreadsToLocalStorage() {
+    try {
+      localStorage.setItem('forum_threads', JSON.stringify(threads));
+      console.log('Threads saved to local storage');
+    } catch (error) {
+      console.error('Error saving to local storage:', error);
+    }
+  }
+
+  function loadThreadsFromLocalStorage() {
+    try {
+      const savedThreads = localStorage.getItem('forum_threads');
+      if (savedThreads) {
+        // Parse dates properly from JSON
+        const parsedThreads = JSON.parse(savedThreads, (key, value) => {
+          // Convert date strings back to Date objects
+          if (key === 'createdAt' && typeof value === 'string') {
+            return new Date(value);
+          }
+          return value;
+        });
+        
+        console.log('Threads loaded from local storage');
+        return parsedThreads;
+      }
+    } catch (error) {
+      console.error('Error loading from local storage:', error);
+    }
+    return null;
+  }
 
   // Header Buttons
   document.getElementById('profile-btn').addEventListener('click', () => {
@@ -231,14 +297,22 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     
     const title = document.getElementById('thread-title').value.trim();
-    const category = document.getElementById('thread-category').value;
     const content = document.getElementById('thread-content').value.trim();
-    const tagsInput = document.getElementById('thread-tags').value.trim();
+    const category = document.getElementById('thread-category').value;
+    let tags = document.getElementById('thread-tags').value.trim();
     
-    const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()) : [];
+    tags = tags ? tags.split(',').map(tag => tag.trim()) : [];
+    
+    // Validate the category is one of the allowed values
+    const validCategories = ['general', 'events', 'support', 'offtopic', 'announcements'];
     
     if (!title || !content || !category) {
       showError('Bitte fülle alle Pflichtfelder aus.');
+      return;
+    }
+    
+    if (!validCategories.includes(category)) {
+      showError(`Kategorie "${category}" ist nicht gültig. Bitte wähle eine der folgenden Kategorien: ${validCategories.join(', ')}`);
       return;
     }
     
@@ -249,26 +323,33 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gespeichert...';
     
     try {
-      const response = await fetch('/threads', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ 
-          title, 
-          content,
-          category,
-          tags
-        })
-      });
+      // TEMPORARILY DISABLED REAL API CALLS - Using demo data only until backend issues are fixed
+      console.log('Creating demo thread: Backend API calls temporarily disabled');
       
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Fehler beim Erstellen des Threads');
-      }
+      // Create a new thread object locally
+      const newThread = {
+        id: 'local-' + Date.now(),
+        title,
+        content,
+        category,
+        tags,
+        authorName: 'Du',
+        authorTeam: 'PULSE',
+        authorAvatar: './images/elysian_logo.png',
+        createdAt: new Date(),
+        likes: [],
+        commentCount: 0,
+        viewCount: 0,
+        replies: [],
+        isOwn: true
+      };
       
-      const thread = await response.json();
+      // Add the thread to our local array
+      threads.unshift(newThread);
+      filteredThreads = [...threads];
+      
+      // Save to local storage
+      saveThreadsToLocalStorage();
       
       showSuccess('Thread erfolgreich erstellt!');
       
@@ -279,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newThreadForm.reset();
         
         // Threads neu laden oder neuen Thread zur Liste hinzufügen
-        loadThreads();
+        renderThreads(filteredThreads);
       }, 300);
       
     } catch (error) {
@@ -397,29 +478,18 @@ document.addEventListener('DOMContentLoaded', () => {
     showLoadingIndicator();
     
     try {
-      const response = await fetch('/threads', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // Try to load threads from local storage first
+      const localStorageThreads = loadThreadsFromLocalStorage();
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      // Check which data structure is returned
-      if (data && data.data && Array.isArray(data.data.threads)) {
-        threads = data.data.threads;
-      } else if (data && Array.isArray(data.threads)) {
-        threads = data.threads;
-      } else if (Array.isArray(data)) {
-        threads = data;
+      if (localStorageThreads && localStorageThreads.length > 0) {
+        threads = localStorageThreads;
+        console.log('Using threads from local storage');
       } else {
-        console.log('Using demo threads: API response has unexpected format', data);
+        // If no threads in local storage, use demo data
+        console.log('No threads in local storage, using demo data');
         threads = getDemoThreads();
+        // Save demo threads to local storage
+        saveThreadsToLocalStorage();
       }
       
       filteredThreads = [...threads];
@@ -513,30 +583,28 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getCategoryBadge(category) {
-    if (!category) return '';
-    
     let icon, label;
     
-    switch(category) {
+    switch (category) {
+      case 'general':
+        icon = 'comments';
+        label = 'Allgemein';
+        break;
       case 'events':
         icon = 'calendar-alt';
         label = 'Events';
         break;
-      case 'community':
-        icon = 'users';
-        label = 'Community';
+      case 'support':
+        icon = 'life-ring';
+        label = 'Support';
         break;
-      case 'music':
-        icon = 'music';
-        label = 'Musik';
+      case 'offtopic':
+        icon = 'random';
+        label = 'Off-Topic';
         break;
-      case 'gaming':
-        icon = 'gamepad';
-        label = 'Gaming';
-        break;
-      case 'questions':
-        icon = 'question-circle';
-        label = 'Fragen';
+      case 'announcements':
+        icon = 'bullhorn';
+        label = 'Ankündigungen';
         break;
       default:
         icon = 'tag';
@@ -554,12 +622,12 @@ document.addEventListener('DOMContentLoaded', () => {
       showLoadingIndicator();
     }
     
-    // Navigation-Styling aktualisieren
+    // Navigation-Styling aktualisieren - Fix for null reference error
     document.querySelectorAll('.forum-nav li').forEach(item => {
       const link = item.querySelector('a');
-      if (link.getAttribute('data-view') === view) {
+      if (link && link.getAttribute('data-view') === view) {
         item.classList.add('active');
-      } else {
+      } else if (link) {
         item.classList.remove('active');
       }
     });
@@ -579,21 +647,25 @@ document.addEventListener('DOMContentLoaded', () => {
           (a.viewCount + (a.commentCount || a.replyCount || 0) * 2)
         );
         break;
-      case 'events-discussion':
-        // Threads filtern, die zur Kategorie "events" gehören
+      case 'general':
+        // Filter threads in "general" category
+        viewThreads = threads.filter(thread => thread.category === 'general');
+        break;
+      case 'events':
+        // Filter threads in "events" category
         viewThreads = threads.filter(thread => thread.category === 'events');
         break;
-      case 'find-ravers':
-        // Threads filtern, die zur Kategorie "community" gehören
-        viewThreads = threads.filter(thread => thread.category === 'community');
+      case 'support':
+        // Filter threads in "support" category
+        viewThreads = threads.filter(thread => thread.category === 'support');
         break;
-      case 'music-discussion':
-        // Threads filtern, die zur Kategorie "music" gehören
-        viewThreads = threads.filter(thread => thread.category === 'music');
+      case 'offtopic':
+        // Filter threads in "offtopic" category
+        viewThreads = threads.filter(thread => thread.category === 'offtopic');
         break;
-      case 'gaming':
-        // Threads filtern, die zur Kategorie "gaming" gehören
-        viewThreads = threads.filter(thread => thread.category === 'gaming');
+      case 'announcements':
+        // Filter threads in "announcements" category
+        viewThreads = threads.filter(thread => thread.category === 'announcements');
         break;
     }
     
@@ -626,17 +698,20 @@ document.addEventListener('DOMContentLoaded', () => {
       case 'trending':
         title = 'Trending Threads - Elysium Forum';
         break;
-      case 'events-discussion':
-        title = 'Event-Diskussionen - Elysium Forum';
+      case 'general':
+        title = 'Allgemein - Elysium Forum';
         break;
-      case 'find-ravers':
-        title = 'Raver finden - Elysium Forum';
+      case 'events':
+        title = 'Events - Elysium Forum';
         break;
-      case 'music-discussion':
-        title = 'Musik-Diskussionen - Elysium Forum';
+      case 'support':
+        title = 'Support - Elysium Forum';
         break;
-      case 'gaming':
-        title = 'Gaming - Elysium Forum';
+      case 'offtopic':
+        title = 'Off-Topic - Elysium Forum';
+        break;
+      case 'announcements':
+        title = 'Ankündigungen - Elysium Forum';
         break;
     }
     
@@ -711,41 +786,36 @@ document.addEventListener('DOMContentLoaded', () => {
     showLoadingIndicator();
     
     try {
-      const response = await fetch(`/threads/${threadId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      // TEMPORARILY DISABLED REAL API CALLS - Using demo data only until backend issues are fixed
+      console.log('Using demo thread: Backend API calls temporarily disabled');
       
-      if (!response.ok) {
-        throw new Error('Thread nicht gefunden');
-      }
+      // If we have a thread with this ID in our local threads array, use that
+      const localThread = threads.find(t => t.id === threadId);
       
-      let thread;
-      
-      const responseData = await response.json();
-      
-      // Handle different API response structures
-      if (responseData.data && responseData.data.thread) {
-        thread = responseData.data.thread;
-      } else if (responseData.thread) {
-        thread = responseData.thread;
+      if (localThread) {
+        // Use the thread from our local data
+        renderThreadDetail(localThread);
       } else {
-        thread = responseData;
+        // Otherwise show demo thread
+        showDemoThreadDetail();
       }
-      
-      renderThreadDetail(thread);
       
     } catch (error) {
-      console.error('Fehler beim Laden des Threads:', error);
-      showDemoThreadDetail(); // Im Fehlerfall Demo-Thread anzeigen
+      console.error('Error loading the thread:', error);
+      // Show demo thread instead of real thread when there's an error
+      showDemoThreadDetail();
     } finally {
       hideLoadingIndicator();
     }
   }
 
   function showDemoThreadDetail() {
+    // First, clean up any existing thread detail
+    const existingDetail = document.querySelector('#thread-detail-container');
+    if (existingDetail) {
+      existingDetail.remove();
+    }
+
     // Demo-Thread für Vorschau
     const demoThread = {
       id: 'demo-1',
@@ -764,7 +834,7 @@ Bass-Lisa`,
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 Stunden her
       category: 'events',
       tags: ['transport', 'event', 'warehouse'],
-      likes: 5,
+      likes: [],
       commentCount: 3,
       viewCount: 45,
       replies: [
@@ -775,7 +845,7 @@ Bass-Lisa`,
           authorAvatar: './images/elysian_logo.png',
           content: 'Ich fahre hin und habe noch 2 Plätze frei! Komme auch aus dem Norden. Schreib mir eine DM für Details.',
           createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 Minuten her
-          likes: 2
+          likes: []
         },
         {
           id: 'comment-2',
@@ -784,7 +854,7 @@ Bass-Lisa`,
           authorAvatar: './images/elysian_logo.png',
           content: 'Falls niemand direkt aus deiner Gegend fährt, können wir uns auch an einer U-Bahn-Station treffen und gemeinsam mit dem Taxi fahren?',
           createdAt: new Date(Date.now() - 1000 * 60 * 50), // 50 Minuten her
-          likes: 1
+          likes: []
         },
         {
           id: 'comment-3',
@@ -793,7 +863,7 @@ Bass-Lisa`,
           authorAvatar: './images/elysian_logo.png',
           content: 'Weiß jemand, ob es Parkplätze in der Nähe gibt? Dann könnte ich eventuell auch fahren und dich mitnehmen @Bass-Lisa.',
           createdAt: new Date(Date.now() - 1000 * 60 * 60), // 1 Stunde her
-          likes: 0
+          likes: []
         }
       ]
     };
@@ -802,196 +872,227 @@ Bass-Lisa`,
   }
 
   function renderThreadDetail(thread) {
-    // Threads-Container ausblenden
-    threadsContainer.classList.add('hidden');
-    
-    // Detailansicht erstellen und anzeigen
-    const detailContent = threadDetailTemplate.cloneNode(true).content;
-    const detailContainer = document.createElement('div');
-    detailContainer.appendChild(detailContent);
-    
-    // Save current thread ID
-    currentThreadId = thread.id;
-    
-    // Inhalte füllen
-    detailContainer.querySelector('#detail-title').textContent = thread.title;
-    
-    const authorName = thread.authorName || 
+    try {
+      // Ensure the thread object is valid
+      if (!thread || typeof thread !== 'object') {
+        console.error('Invalid thread object provided to renderThreadDetail');
+        return;
+      }
+      
+      // Clean up any existing thread detail first
+      const existingDetail = document.querySelector('#thread-detail-container');
+      if (existingDetail) {
+        existingDetail.remove();
+      }
+      
+      // Threads-Container ausblenden
+      threadsContainer.classList.add('hidden');
+      
+      // Detailansicht erstellen und anzeigen
+      const detailContent = threadDetailTemplate.cloneNode(true).content;
+      const detailContainer = document.createElement('div');
+      detailContainer.appendChild(detailContent);
+      
+      // Save current thread ID
+      currentThreadId = thread.id;
+      
+      // Inhalte füllen
+      detailContainer.querySelector('#detail-title').textContent = thread.title || 'Untitled Thread';
+      
+      const authorName = thread.authorName || 
                        (thread.author ? (thread.author.username || 'Anonymous') : 'Anonymous');
-    
-    const authorTeam = thread.authorTeam || 
+      
+      const authorTeam = thread.authorTeam || 
                        (thread.author ? (thread.author.team || 'PULSE') : 'PULSE');
-    
-    detailContainer.querySelector('#detail-author').textContent = authorName;
-    detailContainer.querySelector('#detail-team').textContent = authorTeam || 'TEAM';
-    detailContainer.querySelector('#detail-team').classList.add(authorTeam?.toLowerCase() || 'pulse');
-    detailContainer.querySelector('#detail-date').textContent = getTimeAgo(new Date(thread.createdAt));
-    
-    // Format and set content with line breaks preserved
-    const contentEl = detailContainer.querySelector('#detail-content');
-    contentEl.textContent = thread.content;
-    // Replace newlines with <br> for proper display
-    contentEl.innerHTML = contentEl.innerHTML.replace(/\n/g, '<br>');
-    
-    // View count anzeigen
-    detailContainer.querySelector('#view-count').textContent = thread.viewCount || 0;
-    
-    // Avatar setzen
-    if (thread.authorAvatar || (thread.author && thread.author.avatar)) {
-      detailContainer.querySelector('#detail-avatar').src = thread.authorAvatar || thread.author.avatar;
-    } else {
-      detailContainer.querySelector('#detail-avatar').src = './images/elysian_logo.png';
-    }
-    
-    // Tags anzeigen
-    const tagsContainer = detailContainer.querySelector('#detail-tags');
-    tagsContainer.innerHTML = '';
-    
-    // Add category badge first if exists
-    if (thread.category) {
-      const categoryBadge = getCategoryBadge(thread.category);
-      tagsContainer.innerHTML += categoryBadge;
-    }
-    
-    if (thread.tags && thread.tags.length > 0) {
-      thread.tags.forEach(tag => {
-        const tagEl = document.createElement('span');
-        tagEl.classList.add('tag');
-        tagEl.textContent = tag;
-        tagsContainer.appendChild(tagEl);
+      
+      detailContainer.querySelector('#detail-author').textContent = authorName;
+      detailContainer.querySelector('#detail-team').textContent = authorTeam || 'TEAM';
+      detailContainer.querySelector('#detail-team').classList.add(authorTeam?.toLowerCase() || 'pulse');
+      detailContainer.querySelector('#detail-date').textContent = getTimeAgo(new Date(thread.createdAt || Date.now()));
+      
+      // Format and set content with line breaks preserved
+      const contentEl = detailContainer.querySelector('#detail-content');
+      contentEl.textContent = thread.content || '';
+      // Replace newlines with <br> for proper display
+      contentEl.innerHTML = contentEl.innerHTML.replace(/\n/g, '<br>');
+      
+      // View count anzeigen
+      detailContainer.querySelector('#view-count').textContent = thread.viewCount || 0;
+      
+      // Avatar setzen
+      if (thread.authorAvatar || (thread.author && thread.author.avatar)) {
+        detailContainer.querySelector('#detail-avatar').src = thread.authorAvatar || thread.author.avatar;
+      } else {
+        detailContainer.querySelector('#detail-avatar').src = './images/elysian_logo.png';
+      }
+      
+      // Tags anzeigen
+      const tagsContainer = detailContainer.querySelector('#detail-tags');
+      tagsContainer.innerHTML = '';
+      
+      // Add category badge first if exists
+      if (thread.category) {
+        const categoryBadge = getCategoryBadge(thread.category);
+        tagsContainer.innerHTML += categoryBadge;
+      }
+      
+      if (thread.tags && thread.tags.length > 0) {
+        thread.tags.forEach(tag => {
+          const tagEl = document.createElement('span');
+          tagEl.classList.add('tag');
+          tagEl.textContent = tag;
+          tagsContainer.appendChild(tagEl);
+        });
+      } else if (!thread.category) {
+        tagsContainer.classList.add('hidden');
+      }
+      
+      // Likes anzeigen
+      const likeCount = thread.likes ? (Array.isArray(thread.likes) ? thread.likes.length : thread.likes) : 0;
+      detailContainer.querySelector('#like-count').textContent = likeCount;
+      
+      // Change page title
+      document.title = thread.title + ' - Elysium Forum';
+      
+      // Like button status (highlighted if user has liked)
+      const likeBtn = detailContainer.querySelector('.reaction-btn');
+      if (thread.likes && Array.isArray(thread.likes) && thread.likes.includes(getUserId())) {
+        likeBtn.classList.add('liked');
+        likeBtn.querySelector('i').classList.add('liked');
+      }
+      
+      // Add event listener to the like button
+      likeBtn.addEventListener('click', () => {
+        likeThread(thread.id, likeBtn);
       });
-    } else if (!thread.category) {
-      tagsContainer.classList.add('hidden');
-    }
-    
-    // Likes anzeigen
-    const likeCount = thread.likes ? (Array.isArray(thread.likes) ? thread.likes.length : thread.likes) : 0;
-    detailContainer.querySelector('#like-count').textContent = likeCount;
-    
-    // Change page title
-    document.title = thread.title + ' - Elysium Forum';
-    
-    // Like button status (highlighted if user has liked)
-    const likeBtn = detailContainer.querySelector('.reaction-btn');
-    if (thread.likes && Array.isArray(thread.likes) && thread.likes.includes(getUserId())) {
-      likeBtn.classList.add('liked');
-      likeBtn.querySelector('i').classList.add('liked');
-    }
-    
-    // Add event listener to the like button
-    likeBtn.addEventListener('click', () => {
-      likeThread(thread.id, likeBtn);
-    });
-    
-    // Kommentare anzeigen
-    const commentsContainer = detailContainer.querySelector('#comments-container');
-    commentsContainer.innerHTML = '';
-    
-    // Get comments/replies based on different API response structures
-    const comments = thread.replies || thread.comments || [];
-    
-    if (comments && comments.length > 0) {
-      comments.forEach(comment => {
-        // Skip deleted comments
-        if (comment.deleted) return;
-        
-        const commentEl = document.createElement('div');
-        commentEl.classList.add('comment');
-        
-        const authorName = comment.authorName || 
-                          (comment.author ? (comment.author.username || 'Anonymous') : 'Anonymous');
-        
-        const authorTeam = comment.authorTeam || 
-                          (comment.author ? (comment.author.team || 'PULSE') : 'PULSE');
-        
-        const commentDate = new Date(comment.createdAt);
-        
-        commentEl.innerHTML = `
-          <div class="comment-header">
-            <div class="comment-author">
-              <img src="${comment.authorAvatar || './images/elysian_logo.png'}" alt="Avatar" class="avatar-small">
-              <span class="author-name">${authorName}</span>
-              <span class="author-team ${authorTeam?.toLowerCase() || 'pulse'}">${authorTeam || 'TEAM'}</span>
+      
+      // Kommentare anzeigen
+      const commentsContainer = detailContainer.querySelector('#comments-container');
+      commentsContainer.innerHTML = '';
+      
+      // Get comments/replies based on different API response structures
+      const comments = thread.replies || thread.comments || [];
+      
+      if (comments && comments.length > 0) {
+        comments.forEach(comment => {
+          // Skip deleted comments
+          if (comment.deleted) return;
+          
+          const commentEl = document.createElement('div');
+          commentEl.classList.add('comment');
+          
+          const authorName = comment.authorName || 
+                            (comment.author ? (comment.author.username || 'Anonymous') : 'Anonymous');
+          
+          const authorTeam = comment.authorTeam || 
+                            (comment.author ? (comment.author.team || 'PULSE') : 'PULSE');
+          
+          const commentDate = new Date(comment.createdAt);
+          
+          // Fix for comment.likes.includes is not a function error
+          const hasLiked = comment.likes && 
+                          Array.isArray(comment.likes) && 
+                          getUserId() && 
+                          comment.likes.includes(getUserId());
+          
+          const likeCount = comment.likes ? 
+                          (Array.isArray(comment.likes) ? comment.likes.length : 
+                           (typeof comment.likes === 'number' ? comment.likes : 0)) : 0;
+          
+          commentEl.innerHTML = `
+            <div class="comment-header">
+              <div class="comment-author">
+                <img src="${comment.authorAvatar || './images/elysian_logo.png'}" alt="Avatar" class="avatar-small">
+                <span class="author-name">${authorName}</span>
+                <span class="author-team ${authorTeam?.toLowerCase() || 'pulse'}">${authorTeam || 'TEAM'}</span>
+              </div>
+              <span class="comment-date" title="${commentDate.toLocaleString('de-DE')}">${getTimeAgo(commentDate)}</span>
             </div>
-            <span class="comment-date" title="${commentDate.toLocaleString('de-DE')}">${getTimeAgo(commentDate)}</span>
-          </div>
-          <div class="comment-body">
-            ${comment.content}
-          </div>
-          <div class="comment-footer">
-            <button class="like-btn" data-id="${comment.id}">
-              <i class="fas fa-heart ${comment.likes && comment.likes.includes(getUserId()) ? 'liked' : ''}"></i> 
-              ${comment.likes ? (Array.isArray(comment.likes) ? comment.likes.length : comment.likes) : 0}
-            </button>
-            <button class="reply-btn"><i class="fas fa-reply"></i> Antworten</button>
-          </div>
-        `;
-        
-        // Add like comment listener
-        const likeCommentBtn = commentEl.querySelector('.like-btn');
-        likeCommentBtn.addEventListener('click', () => {
-          likeComment(thread.id, comment.id, likeCommentBtn);
+            <div class="comment-body">
+              ${comment.content}
+            </div>
+            <div class="comment-footer">
+              <button class="like-btn" data-id="${comment.id}">
+                <i class="fas fa-heart ${hasLiked ? 'liked' : ''}"></i> 
+                ${likeCount}
+              </button>
+              <button class="reply-btn"><i class="fas fa-reply"></i> Antworten</button>
+            </div>
+          `;
+          
+          // Add like comment listener
+          const likeCommentBtn = commentEl.querySelector('.like-btn');
+          likeCommentBtn.addEventListener('click', () => {
+            likeComment(thread.id, comment.id, likeCommentBtn);
+          });
+          
+          commentsContainer.appendChild(commentEl);
         });
+      }
+      
+      // Kommentar-Anzahl aktualisieren
+      detailContainer.querySelector('#comment-count').textContent = comments.length || 0;
+      
+      // Ereignisbehandlung für Zurück-Button
+      const backButton = detailContainer.querySelector('#back-to-threads');
+      backButton.addEventListener('click', () => {
+        // Save reference to detail container before trying to remove it
+        const detailContainerElement = document.querySelector('#thread-detail-container');
         
-        commentsContainer.appendChild(commentEl);
+        // Detail-Container entfernen - Fix for null reference error
+        if (detailContainerElement) {
+          detailContainerElement.remove();
+        }
+        
+        // Threads wieder anzeigen
+        threadsContainer.classList.remove('hidden');
+        // Reset current thread ID
+        currentThreadId = null;
+        // Reset page title
+        updatePageTitle(currentView);
       });
-    }
-    
-    // Kommentar-Anzahl aktualisieren
-    detailContainer.querySelector('#comment-count').textContent = comments.length || 0;
-    
-    // Ereignisbehandlung für Zurück-Button
-    const backButton = detailContainer.querySelector('#back-to-threads');
-    backButton.addEventListener('click', () => {
-      // Detail-Container entfernen
-      detailContainer.querySelector('#thread-detail-container').remove();
-      // Threads wieder anzeigen
-      threadsContainer.classList.remove('hidden');
-      // Reset current thread ID
-      currentThreadId = null;
-      // Reset page title
-      updatePageTitle(currentView);
-    });
-    
-    // Kommentar-Formular-Ereignisbehandlung
-    const commentForm = detailContainer.querySelector('.comment-form');
-    const commentInput = detailContainer.querySelector('#comment-input');
-    const submitCommentBtn = detailContainer.querySelector('#submit-comment');
-    
-    submitCommentBtn.addEventListener('click', async () => {
-      const content = commentInput.value.trim();
-      if (!content) return;
       
-      // Change button state 
-      const originalText = submitCommentBtn.innerHTML;
-      submitCommentBtn.disabled = true;
-      submitCommentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
+      // Kommentar-Formular-Ereignisbehandlung
+      const commentForm = detailContainer.querySelector('.comment-form');
+      const commentInput = detailContainer.querySelector('#comment-input');
+      const submitCommentBtn = detailContainer.querySelector('#submit-comment');
       
-      try {
-        // In einer echten App würde der Kommentar an den Server gesendet
-        const response = await fetch(`/threads/${thread.id}/replies`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ content })
-        }).catch(() => {
-          // Demo-Modus - Fehler abfangen
-          return { ok: false };
-        });
+      submitCommentBtn.addEventListener('click', async () => {
+        const content = commentInput.value.trim();
+        if (!content) return;
         
-        if (!response.ok) {
-          // Demo-Modus: Kommentar lokal hinzufügen
+        // Change button state 
+        const originalText = submitCommentBtn.innerHTML;
+        submitCommentBtn.disabled = true;
+        submitCommentBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
+        
+        try {
+          // DEMO MODE - Create a local comment without sending to the server
+          console.log('Adding demo comment: Backend API calls disabled');
+          
+          // Create new comment object
           const newComment = {
-            id: 'new-comment-' + Date.now(),
+            id: 'comment-' + Date.now(),
             authorName: 'Du',
             authorTeam: 'PULSE',
             authorAvatar: './images/elysian_logo.png',
             content: content,
             createdAt: new Date(),
-            likes: 0
+            likes: []
           };
+          
+          // Add comment to thread object if it's a local thread
+          const threadIndex = threads.findIndex(t => t.id === thread.id);
+          if (threadIndex !== -1) {
+            if (!threads[threadIndex].replies) {
+              threads[threadIndex].replies = [];
+            }
+            threads[threadIndex].replies.push(newComment);
+            threads[threadIndex].commentCount = (threads[threadIndex].commentCount || 0) + 1;
+            
+            // Save updated threads to local storage
+            saveThreadsToLocalStorage();
+          }
           
           // Kommentar zur UI hinzufügen
           const commentEl = document.createElement('div');
@@ -1009,10 +1110,18 @@ Bass-Lisa`,
               ${newComment.content}
             </div>
             <div class="comment-footer">
-              <button class="like-btn"><i class="fas fa-heart"></i> ${newComment.likes}</button>
+              <button class="like-btn" data-id="${newComment.id}">
+                <i class="fas fa-heart"></i> 0
+              </button>
               <button class="reply-btn"><i class="fas fa-reply"></i> Antworten</button>
             </div>
           `;
+          
+          // Add like comment listener
+          const likeCommentBtn = commentEl.querySelector('.like-btn');
+          likeCommentBtn.addEventListener('click', () => {
+            likeComment(thread.id, newComment.id, likeCommentBtn);
+          });
           
           // Apply fade-in animation
           commentEl.style.opacity = '0';
@@ -1026,8 +1135,10 @@ Bass-Lisa`,
           
           // Kommentar-Zähler aktualisieren
           const commentCount = detailContainer.querySelector('#comment-count');
-          const newCount = parseInt(commentCount.textContent) + 1;
-          commentCount.textContent = newCount;
+          if (commentCount) {
+            const newCount = parseInt(commentCount.textContent || '0') + 1;
+            commentCount.textContent = newCount;
+          }
           
           // Show success message
           const commentSuccess = document.createElement('div');
@@ -1042,41 +1153,48 @@ Bass-Lisa`,
           // Formular zurücksetzen
           commentInput.value = '';
           
-          return;
+        } catch (error) {
+          console.error('Fehler beim Kommentieren:', error);
+          showError('Kommentar konnte nicht gespeichert werden.');
+        } finally {
+          // Reset button state
+          submitCommentBtn.disabled = false;
+          submitCommentBtn.innerHTML = originalText;
         }
-        
-        // Erfolgreicher API-Aufruf
-        const data = await response.json();
-        
-        // Thread mit aktualisierten Kommentaren neu laden
-        await showThreadDetail(thread.id);
-        
-      } catch (error) {
-        console.error('Fehler beim Kommentieren:', error);
-        showError('Kommentar konnte nicht gespeichert werden.');
-      } finally {
-        // Reset button state
-        submitCommentBtn.disabled = false;
-        submitCommentBtn.innerHTML = originalText;
+      });
+      
+      // Textfeld-Ereignisbehandlung
+      commentInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+          submitCommentBtn.classList.add('active');
+        } else {
+          submitCommentBtn.classList.remove('active');
+        }
+      });
+      
+      // Detail-Container an DOM anhängen
+      threadsContainer.parentNode.insertBefore(detailContainer.querySelector('#thread-detail-container'), threadsContainer);
+      
+      // Apply fade-in animation to the detail view
+      setTimeout(() => {
+        const detailElement = document.querySelector('#thread-detail-container');
+        if (detailElement) {
+          detailElement.classList.add('show');
+        }
+      }, 10);
+    } catch (error) {
+      console.error('Error rendering thread detail:', error);
+      showError('Es ist ein Fehler beim Anzeigen des Threads aufgetreten.');
+      
+      // Clean up any partial thread detail
+      const existingDetail = document.querySelector('#thread-detail-container');
+      if (existingDetail) {
+        existingDetail.remove();
       }
-    });
-    
-    // Textfeld-Ereignisbehandlung
-    commentInput.addEventListener('input', function() {
-      if (this.value.trim()) {
-        submitCommentBtn.classList.add('active');
-      } else {
-        submitCommentBtn.classList.remove('active');
-      }
-    });
-    
-    // Detail-Container an DOM anhängen
-    threadsContainer.parentNode.insertBefore(detailContainer.querySelector('#thread-detail-container'), threadsContainer);
-    
-    // Apply fade-in animation to the detail view
-    setTimeout(() => {
-      detailContainer.querySelector('#thread-detail-container').classList.add('show');
-    }, 10);
+      
+      // Show threads again
+      threadsContainer.classList.remove('hidden');
+    }
   }
   
   // Like a thread
@@ -1087,48 +1205,56 @@ Bass-Lisa`,
     const likeCountElement = likeBtn.querySelector('span');
     const likeIcon = likeBtn.querySelector('i');
     const isLiked = likeIcon.classList.contains('liked');
-    
-    // Toggle like state in UI
-    if (isLiked) {
-      likeIcon.classList.remove('liked');
-      likeCountElement.textContent = Math.max(0, parseInt(likeCountElement.textContent) - 1);
-    } else {
-      likeIcon.classList.add('liked');
-      likeCountElement.textContent = parseInt(likeCountElement.textContent) + 1;
-    }
+    const userId = getUserId();
     
     try {
-      // Send like request to server
-      const response = await fetch(`/threads/${threadId}/like`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`
+      // DEMO MODE - Update like without sending to server
+      console.log('Toggling like in demo mode: Backend API calls disabled');
+      
+      // Find thread in local data
+      const threadIndex = threads.findIndex(t => t.id === threadId);
+      if (threadIndex !== -1) {
+        const thread = threads[threadIndex];
+        
+        // Ensure likes is always an array
+        if (!Array.isArray(thread.likes)) {
+          thread.likes = [];
         }
-      }).catch(() => {
-        // In demo mode, just return a fake response
-        return { ok: false };
-      });
-      
-      if (!response.ok) {
-        // For demo, do nothing (UI already updated)
-        return;
+        
+        // Toggle like
+        const userLikeIndex = thread.likes.indexOf(userId);
+        if (userLikeIndex === -1) {
+          // Add like
+          thread.likes.push(userId);
+        } else {
+          // Remove like
+          thread.likes.splice(userLikeIndex, 1);
+        }
+        
+        // Update UI based on new state
+        const newIsLiked = thread.likes.includes(userId);
+        const newLikeCount = thread.likes.length;
+        
+        likeIcon.classList.toggle('liked', newIsLiked);
+        likeCountElement.textContent = newLikeCount;
+        
+        // Save updated threads to local storage
+        saveThreadsToLocalStorage();
+      } else {
+        // Toggle like state in UI only for demo thread
+        if (isLiked) {
+          likeIcon.classList.remove('liked');
+          likeCountElement.textContent = Math.max(0, parseInt(likeCountElement.textContent) - 1);
+        } else {
+          likeIcon.classList.add('liked');
+          likeCountElement.textContent = parseInt(likeCountElement.textContent) + 1;
+        }
       }
-      
-      // For real implementation, update UI based on server response
-      const data = await response.json();
-      likeIcon.classList.toggle('liked', data.data.isLiked);
-      likeCountElement.textContent = data.data.likeCount;
-      
     } catch (error) {
       console.error('Error toggling like:', error);
       // Revert UI change on error
-      if (isLiked) {
-        likeIcon.classList.add('liked');
-        likeCountElement.textContent = parseInt(likeCountElement.textContent) + 1;
-      } else {
-        likeIcon.classList.remove('liked');
-        likeCountElement.textContent = Math.max(0, parseInt(likeCountElement.textContent) - 1);
-      }
+      likeIcon.classList.toggle('liked', isLiked);
+      likeCountElement.textContent = parseInt(likeCountElement.textContent) + (isLiked ? 1 : -1);
     }
   }
   
@@ -1139,47 +1265,69 @@ Bass-Lisa`,
     // Optimistic UI update
     const isLiked = likeBtn.querySelector('i').classList.contains('liked');
     const likeCount = parseInt(likeBtn.textContent.trim().split(' ').pop()) || 0;
+    const userId = getUserId();
     
+    try {
+      // DEMO MODE - Update like without sending to server
+      console.log('Toggling comment like in demo mode: Backend API calls disabled');
+      
+      // Find thread in local data
+      const threadIndex = threads.findIndex(t => t.id === threadId);
+      if (threadIndex !== -1) {
+        const thread = threads[threadIndex];
+        const comments = thread.replies || thread.comments || [];
+        const commentIndex = comments.findIndex(c => c.id === commentId);
+        
+        if (commentIndex !== -1) {
+          const comment = comments[commentIndex];
+          
+          // Ensure likes is always an array
+          if (!Array.isArray(comment.likes)) {
+            comment.likes = [];
+          }
+          
+          // Toggle like
+          const userLikeIndex = comment.likes.indexOf(userId);
+          if (userLikeIndex === -1) {
+            // Add like
+            comment.likes.push(userId);
+          } else {
+            // Remove like
+            comment.likes.splice(userLikeIndex, 1);
+          }
+          
+          // Update UI based on new state
+          const newIsLiked = comment.likes.includes(userId);
+          const newLikeCount = comment.likes.length;
+          
+          likeBtn.querySelector('i').classList.toggle('liked', newIsLiked);
+          likeBtn.innerHTML = `<i class="fas fa-heart ${newIsLiked ? 'liked' : ''}"></i> ${newLikeCount}`;
+          
+          // Save updated threads to local storage
+          saveThreadsToLocalStorage();
+        } else {
+          // Comment not found, just update UI
+          updateCommentLikeUI(likeBtn, isLiked, likeCount);
+        }
+      } else {
+        // Thread not found, just update UI
+        updateCommentLikeUI(likeBtn, isLiked, likeCount);
+      }
+    } catch (error) {
+      console.error('Error toggling comment like:', error);
+      // Revert UI change on error
+      updateCommentLikeUI(likeBtn, isLiked, likeCount);
+    }
+  }
+  
+  // Helper function to update comment like UI
+  function updateCommentLikeUI(likeBtn, isLiked, likeCount) {
     if (isLiked) {
       likeBtn.querySelector('i').classList.remove('liked');
       likeBtn.innerHTML = `<i class="fas fa-heart"></i> ${Math.max(0, likeCount - 1)}`;
     } else {
       likeBtn.querySelector('i').classList.add('liked');
       likeBtn.innerHTML = `<i class="fas fa-heart liked"></i> ${likeCount + 1}`;
-    }
-    
-    try {
-      // Send like request to server
-      const response = await fetch(`/threads/${threadId}/replies/${commentId}/like`, {
-        method: 'PATCH',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }).catch(() => {
-        // In demo mode, just return a fake response
-        return { ok: false };
-      });
-      
-      if (!response.ok) {
-        // For demo, do nothing (UI already updated)
-        return;
-      }
-      
-      // For real implementation, update UI based on server response
-      const data = await response.json();
-      likeBtn.querySelector('i').classList.toggle('liked', data.data.isLiked);
-      likeBtn.innerHTML = `<i class="fas fa-heart ${data.data.isLiked ? 'liked' : ''}"></i> ${data.data.likeCount}`;
-      
-    } catch (error) {
-      console.error('Error toggling comment like:', error);
-      // Revert UI change on error
-      if (isLiked) {
-        likeBtn.querySelector('i').classList.add('liked');
-        likeBtn.innerHTML = `<i class="fas fa-heart liked"></i> ${likeCount}`;
-      } else {
-        likeBtn.querySelector('i').classList.remove('liked');
-        likeBtn.innerHTML = `<i class="fas fa-heart"></i> ${Math.max(0, likeCount - 1)}`;
-      }
     }
   }
   
@@ -1353,5 +1501,172 @@ Bass-Lisa`,
         viewCount: 67
       }
     ];
+  }
+
+  // Create or find the news sections container
+  let newsContainer = document.querySelector('.news-sections-container');
+  if (!newsContainer) {
+    newsContainer = document.createElement('div');
+    newsContainer.className = 'news-sections-container';
+    document.querySelector('.forum-content').appendChild(newsContainer);
+  }
+  
+  // Define the news content for the anchors
+  const newsContent = {
+    'rescue-feature': {
+      title: 'Neues Feature: Rescue-Button',
+      date: '15. März 2025',
+      content: `
+        <p>Wir freuen uns, den Launch unseres neuen Rescue-Button-Features ankündigen zu können!</p>
+        <p>Ab sofort können alle Elysian-Nutzer den Rescue-Button in der App verwenden, um in Notfallsituationen schnell Hilfe zu rufen oder Freunde zu alarmieren.</p>
+        <p><strong>So funktioniert's:</strong></p>
+        <ul>
+          <li>Der Rescue-Button ist jederzeit in der App verfügbar</li>
+          <li>Ein Klick öffnet das Notfall-Menü mit verschiedenen Optionen</li>
+          <li>Wähle zwischen "Freunde benachrichtigen", "Security rufen" oder "Notfallkontakt anrufen"</li>
+          <li>Dein Standort wird automatisch mit der Hilfeaufforderung geteilt</li>
+        </ul>
+        <p>Wir haben dieses Feature nach umfangreichem Feedback aus der Community entwickelt, um die Sicherheit auf Events weiter zu verbessern.</p>
+      `
+    },
+    'dj-pulse': {
+      title: 'DJ Pulse - Neues Team',
+      date: '08. März 2025',
+      content: `
+        <p>Wir sind stolz, DJ Pulse als neuen offiziellen Partner im Pulse-Team begrüßen zu dürfen!</p>
+        <p>DJ Pulse ist bekannt für seine einzigartigen Sets, die verschiedene Genres wie Techno, House und Trance verschmelzen. Ab nächster Woche wird er exklusive Sets für die Elysian-Community bereitstellen.</p>
+        <p><strong>Was euch erwartet:</strong></p>
+        <ul>
+          <li>Wöchentliche exklusive Sets in der Elysian-App</li>
+          <li>Monatliche Live-Sessions mit DJ-Voting</li>
+          <li>Community-Events mit DJ Pulse als Host</li>
+        </ul>
+        <p>Folgt DJ Pulse auf Instagram @djpulse_official, um keine Updates zu verpassen!</p>
+      `
+    },
+    'live-voting': {
+      title: 'Live-Voting System Release',
+      date: '02. März 2025',
+      content: `
+        <p>Unser neues Live-Voting System ist jetzt offiziell für alle Elysian-Nutzer verfügbar!</p>
+        <p>Mit diesem Feature könnt ihr die Musik auf Events direkt beeinflussen und Künstlern Echtzeit-Feedback geben.</p>
+        <p><strong>Features des Live-Voting Systems:</strong></p>
+        <ul>
+          <li>Track-Wünsche einreichen und für Favoriten stimmen</li>
+          <li>Stimmung und Energie bewerten, um DJs direktes Feedback zu geben</li>
+          <li>An Umfragen teilnehmen, z.B. "Mehr House oder mehr Techno?"</li>
+          <li>Spezielle Wunsch-Sessions bei teilnehmenden Events</li>
+        </ul>
+        <p>Das System ist bereits auf über 50 Events in 12 Städten im Einsatz und hat durchweg positives Feedback erhalten.</p>
+      `
+    },
+    'friends-finder': {
+      title: 'Community-Feature: Freundesfinder',
+      date: '28. Februar 2025',
+      content: `
+        <p>Der neue Freundesfinder ist jetzt verfügbar - nie mehr Freunde auf Events verlieren!</p>
+        <p>Mit diesem Feature könnt ihr eure Freunde auf Events in Echtzeit lokalisieren und gemeinsame Treffpunkte setzen.</p>
+        <p><strong>So funktioniert der Freundesfinder:</strong></p>
+        <ul>
+          <li>Standortfreigabe für ausgewählte Freunde während des Events</li>
+          <li>Treffpunkte auf der Karte markieren und teilen</li>
+          <li>Notifications, wenn Freunde ankommen oder den Standort wechseln</li>
+          <li>Gruppenchats für bessere Koordination</li>
+        </ul>
+        <p>Der Freundesfinder wurde mit Fokus auf Datenschutz entwickelt - alle Standortdaten werden nur temporär gespeichert und nach dem Event automatisch gelöscht.</p>
+      `
+    },
+    'new-locations': {
+      title: 'Neue Partner-Locations',
+      date: '14. Februar 2025',
+      content: `
+        <p>Wir freuen uns, 12 neue Partner-Locations in Berlin, Hamburg und München begrüßen zu dürfen!</p>
+        <p>Diese Erweiterung unseres Netzwerks bedeutet noch mehr exklusive Events und Vorteile für alle Elysian-Mitglieder.</p>
+        <p><strong>Neue Locations nach Stadt:</strong></p>
+        <ul>
+          <li><strong>Berlin:</strong> Pulse Club, Echonest, Vibration Factory, Quantum Lounge, District 8</li>
+          <li><strong>Hamburg:</strong> Harbor Beats, Elbe Vibes, Northern Lights</li>
+          <li><strong>München:</strong> Isar Dreams, Alpine Beats, Southern Pulse, Quantum München</li>
+        </ul>
+        <p>Ab März werden in diesen Locations regelmäßig exklusive Events für Elysian-Mitglieder stattfinden. Haltet die Event-Sektion für Updates im Auge!</p>
+      `
+    },
+    'app-update': {
+      title: 'App-Update: Version 2.5',
+      date: '05. Februar 2025',
+      content: `
+        <p>Version 2.5 der Elysian-App ist jetzt verfügbar mit zahlreichen Verbesserungen!</p>
+        <p>Dieses Update bringt ein verbessertes UI-Design, bessere Performance und mehrere neue Features.</p>
+        <p><strong>Highlights des Updates:</strong></p>
+        <ul>
+          <li>Komplett überarbeitetes UI für bessere Benutzerfreundlichkeit</li>
+          <li>Dark Mode für alle Bereiche der App</li>
+          <li>30% schnellere Ladezeiten und reduzierter Akkuverbrauch</li>
+          <li>Neue Personalisierungsoptionen für euer Profil</li>
+          <li>Erweiterte Event-Filter und Suchfunktionen</li>
+          <li>Zahlreiche Bugfixes und Stabilisierungen</li>
+        </ul>
+        <p>Das Update wird automatisch über den App Store oder Google Play Store verteilt. Falls ihr es noch nicht erhalten habt, überprüft eure Updates.</p>
+      `
+    }
+  };
+  
+  // Create news sections for all known anchors
+  for (const [anchor, data] of Object.entries(newsContent)) {
+    let section = document.getElementById(anchor);
+    if (!section) {
+      section = document.createElement('section');
+      section.id = anchor;
+      section.className = 'forum-section news-detail-section';
+      section.innerHTML = `
+        <div class="section-container">
+          <h2 class="section-title">${data.title}</h2>
+          <div class="news-detail-meta">
+            <span class="news-date">${data.date}</span>
+          </div>
+          <div class="news-detail-content">
+            ${data.content}
+          </div>
+          <div class="news-detail-comments">
+            <h3>Diskussion</h3>
+            <div class="comments-container">
+              <div class="comment-form">
+                <textarea placeholder="Teile deine Gedanken zu diesem Update..."></textarea>
+                <button class="neon-btn primary"><i class="fas fa-paper-plane"></i> Kommentar senden</button>
+              </div>
+              <p class="no-comments">Sei der Erste, der zu diesem Thema kommentiert.</p>
+            </div>
+          </div>
+        </div>
+      `;
+      newsContainer.appendChild(section);
+    }
+  }
+  
+  // Check for stored anchor from index page
+  const storedAnchor = localStorage.getItem('elysian-forum-anchor');
+  if (storedAnchor) {
+    // Clear the storage so it doesn't trigger on future page loads
+    localStorage.removeItem('elysian-forum-anchor');
+    
+    // Find the element with the matching ID
+    const targetElement = document.getElementById(storedAnchor);
+    
+    // Scroll to the element if found
+    if (targetElement) {
+      setTimeout(() => {
+        const headerHeight = document.querySelector('.forum-header')?.offsetHeight || 80;
+        window.scrollTo({
+          top: targetElement.offsetTop - headerHeight - 20,
+          behavior: 'smooth'
+        });
+        
+        // Highlight the element
+        targetElement.classList.add('highlight-section');
+        setTimeout(() => {
+          targetElement.classList.remove('highlight-section');
+        }, 3000);
+      }, 300); // Small delay to ensure DOM is ready
+    }
   }
 });

@@ -13,6 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const targetTabs = document.querySelectorAll('.target-tab');
   const aboutCards = document.querySelectorAll('.about-card');
   const safetyFeatures = document.querySelectorAll('.safety-feature');
+  const mehrErfahrenBtn = document.getElementById('mehr-erfahren-btn');
+
+  // Extrem einfache Lösung für den "Mehr erfahren" Button
+  if (mehrErfahrenBtn) {
+    mehrErfahrenBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetElement = document.getElementById('was-ist-elysian');
+      if (targetElement) {
+        targetElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+      }
+    });
+  }
 
   // Benachrichtigungssystem
   const notificationContainer = document.getElementById('notification-container');
@@ -349,33 +361,54 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Ripple-Effekt für Links
-  function createLinkRipple(e) {
+  function createLinkRipple(e, element) {
+    if (!e || !element || !element.appendChild) {
+      console.warn('Invalid parameters for createLinkRipple');
+      return;
+    }
+    
     try {
-      if (!this) return;
-      
+      // Create the ripple element
       const ripple = document.createElement('span');
       ripple.classList.add('nav-ripple');
-      this.appendChild(ripple);
       
-      const rect = this.getBoundingClientRect();
-      if (!rect) return;
+      // Get element position and dimensions
+      const rect = element.getBoundingClientRect();
+      if (!rect) {
+        console.warn('Could not get element bounding rect');
+        return;
+      }
       
-      const size = Math.max(rect.width, rect.height);
+      // Calculate ripple size based on element
+      const size = Math.max(rect.width, rect.height) * 1.2; // Slightly larger
       
-      ripple.style.width = ripple.style.height = `${size}px`;
+      // Set ripple size
+      ripple.style.width = `${size}px`;
+      ripple.style.height = `${size}px`;
       
-      // Berechnung mit Absicherung
-      const left = e.clientX - rect.left - size/2;
-      const top = e.clientY - rect.top - size/2;
+      // Calculate position - handle possible null or undefined clientX/Y
+      const clientX = e.clientX || e.pageX || (rect.left + rect.width/2);
+      const clientY = e.clientY || e.pageY || (rect.top + rect.height/2);
       
+      const left = clientX - rect.left - size/2;
+      const top = clientY - rect.top - size/2;
+      
+      // Set position
       ripple.style.left = `${left}px`;
       ripple.style.top = `${top}px`;
       
-      ripple.classList.add('active');
+      // Append to element
+      element.appendChild(ripple);
       
+      // Activate the animation
       setTimeout(() => {
-        if (ripple.parentNode) {
-          ripple.remove();
+        ripple.classList.add('active');
+      }, 10);
+      
+      // Clean up after animation
+      setTimeout(() => {
+        if (ripple && ripple.parentNode) {
+          ripple.parentNode.removeChild(ripple);
         }
       }, 1000);
     } catch (error) {
@@ -487,101 +520,73 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Statistiken animieren
   function animateStats() {
-    try {
-      const statItems = document.querySelectorAll('.stat-value');
-      if (!statItems.length) return;
+    const statItems = document.querySelectorAll('.stat-item');
+    const statValues = document.querySelectorAll('.stat-value');
+    
+    if (!statValues.length) return;
+    
+    let animated = false;
+    
+    const checkVisibility = () => {
+      if (animated) return;
       
-      const observerOptions = {
-        threshold: 0.5,
-        rootMargin: '0px 0px -100px 0px'
-      };
+      const statsSection = document.querySelector('.stats-section');
+      if (!statsSection) return;
       
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const target = entry.target;
-              if (!target) return;
-              
-              const finalValue = parseInt(target.getAttribute('data-count') || '0');
-              animateCounter(target, finalValue);
-              observer.unobserve(target);
-            }
-          });
-        }, observerOptions);
+      const rect = statsSection.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+      
+      if (isVisible) {
+        animated = true;
+        statItems.forEach(item => item.classList.add('animate-in'));
         
-        statItems.forEach(item => {
-          if (item) {
-            observer.observe(item);
+        statValues.forEach(element => {
+          const finalValue = parseInt(element.getAttribute('data-count'), 10);
+          if (!isNaN(finalValue)) {
+            animateCounter(element, finalValue);
           }
         });
-      } else {
-        // Fallback für Browser ohne IntersectionObserver
-        // Einfache Sichtbarkeitsprüfung
-        const checkVisibility = () => {
-          statItems.forEach(item => {
-            if (!item) return;
-            
-            const rect = item.getBoundingClientRect();
-            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-              const finalValue = parseInt(item.getAttribute('data-count') || '0');
-              if (item.textContent === '0') { // Nur animieren, wenn noch nicht animiert
-                animateCounter(item, finalValue);
-              }
-            }
-          });
-        };
         
-        // Einmal prüfen und dann bei Scroll
-        checkVisibility();
-        window.addEventListener('scroll', checkVisibility);
+        document.removeEventListener('scroll', checkVisibility);
       }
-    } catch (error) {
-      console.warn('Animate stats error:', error);
-    }
+    };
+    
+    // Initial check
+    checkVisibility();
+    
+    // Add scroll listener
+    document.addEventListener('scroll', checkVisibility);
   }
   
-  // Zähler animieren
   function animateCounter(element, finalValue) {
-    try {
-      if (!element) return;
+    const duration = 2000; // 2 seconds animation
+    const startValue = 0;
+    const startTime = performance.now();
+    
+    function updateCounter(timestamp) {
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutCubic(progress);
       
-      let startTime;
-      const duration = 2000;
-      const startValue = 0;
+      const currentValue = Math.floor(startValue + (finalValue - startValue) * easedProgress);
+      element.textContent = currentValue.toLocaleString();
       
-      function updateCounter(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        const easedProgress = easeOutCubic(progress);
-        const currentValue = Math.floor(startValue + (finalValue - startValue) * easedProgress);
-        
-        element.textContent = currentValue.toLocaleString();
-        
-        if (progress < 1) {
-          requestAnimationFrame(updateCounter);
-        }
-      }
-      
-      requestAnimationFrame(updateCounter);
-    } catch (error) {
-      console.warn('Counter animation error:', error);
-      // Fallback: Direkt den Endwert anzeigen
-      if (element) {
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      } else {
         element.textContent = finalValue.toLocaleString();
       }
     }
+    
+    requestAnimationFrame(updateCounter);
   }
   
-  // Easing-Funktion
   function easeOutCubic(x) {
     return 1 - Math.pow(1 - x, 3);
   }
 
-  // Event-Filter
-  if (filterButtons.length) {
+  // Zuweisen der Event-Filter-Handler
+  if (filterButtons) {
     filterButtons.forEach(btn => {
       if (!btn) return;
       
@@ -597,7 +602,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-  
+
+  // Funktion zum Filtern von Events
   function filterEvents(filter) {
     const eventCards = document.querySelectorAll('.event-card');
     
@@ -627,6 +633,58 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Spezieller Handler für Neuigkeiten-Links
+  document.querySelectorAll('.news-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      try {
+        // Ripple-Effekt für besseres visuelles Feedback
+        createLinkRipple(e, this);
+        
+        // Wenn es ein interner Link ist, den wir selbst verarbeiten wollen
+        const href = this.getAttribute('href') || '';
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const targetElement = document.querySelector(href);
+          if (targetElement) {
+            const headerHeight = document.querySelector('.main-header').offsetHeight || 80;
+            window.scrollTo({
+              top: targetElement.offsetTop - headerHeight - 20,
+              behavior: 'smooth'
+            });
+            
+            // Notification
+            showNotification('Navigiere zum Abschnitt...', 'info', 1500);
+          } else {
+            console.warn(`Target news element not found: ${href}`);
+          }
+          return;
+        }
+        
+        // Wenn es ein Link zu forum.html mit einem Anker ist
+        if (href.includes('forum.html#')) {
+          // Wir speichern den Anker im localStorage
+          const anchor = href.split('#')[1];
+          if (anchor) {
+            localStorage.setItem('elysian-forum-anchor', anchor);
+            
+            // Notification
+            showNotification('Navigiere zu den News-Details...', 'info', 1500);
+            
+            // Add a slight delay to ensure the notification is visible
+            setTimeout(() => {
+              // Continue with normal link click
+              return true;
+            }, 300);
+          }
+        }
+      } catch (error) {
+        console.warn('News link click error:', error);
+        // Let the normal click event continue
+        return true;
+      }
+    });
+  });
 
   // VERBESSERTE FEATURE-TABS FUNKTIONALITÄT
   if (targetTabs.length) {
@@ -890,287 +948,172 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Cookie-Banner nach kurzer Verzögerung anzeigen
-  setTimeout(() => {
-    const privacyBanner = document.getElementById('privacy-banner');
-    if (privacyBanner && !localStorage.getItem('cookies-accepted')) {
-      privacyBanner.classList.add('visible');
-    }
-  }, 3000);
-  
-  // Cookie-Banner Buttons
-  const acceptButton = document.getElementById('privacy-accept');
-  if (acceptButton) {
-    acceptButton.addEventListener('click', () => {
-      const banner = document.getElementById('privacy-banner');
-      if (banner) {
-        banner.classList.remove('visible');
-      }
-      localStorage.setItem('cookies-accepted', 'true');
-    });
-  }
-  
-  const settingsButton = document.getElementById('privacy-settings');
-  if (settingsButton) {
-    settingsButton.addEventListener('click', () => {
-      showNotification('Cookie-Einstellungen werden geladen...', 'info');
-      setTimeout(() => {
-        alert('Cookie-Einstellungen werden geladen...');
-      }, 500);
-    });
-  }
-
-  // Header-Scrolleffekt
-  window.addEventListener('scroll', () => {
-    if (header) {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    }
-    
-    // Parallax-Effekt für Sektionen
-    parallaxSections();
-    
-    // Elemente animieren, wenn sie ins Sichtfeld kommen
-    animateOnScroll();
-  });
-  
-  // Hover-Effekte für Navigationslinks
-  navLinks.forEach(link => {
-    if (link) {
-      link.addEventListener('mouseenter', createLinkRipple);
-    }
-  });
-  
-  // Mobile-Links mit Ripple-Effekt
-  mobileNavLinks.forEach(link => {
-    if (link) {
-      link.addEventListener('click', function() {
-        if (mobileMenu) {
-          mobileMenu.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-    }
-  });
-  
-  // 3D-Tilt-Effekt für Feature-Karten
-  featureCards.forEach(card => {
-    if (card) {
-      card.addEventListener('mousemove', handleTilt);
-      card.addEventListener('mouseleave', resetTilt);
-      
-      // Keyboard-Navigation für Barrierefreiheit
-      card.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          // Tilt-Effekt temporär aktivieren
-          this.style.transform = 'perspective(1000px) rotateX(5deg) rotateY(5deg) scale3d(1.05, 1.05, 1.05)';
-          setTimeout(() => {
-            this.style.transform = '';
-          }, 1000);
-        }
-      });
-    }
-  });
-
-  // 3D-Tilt-Effekt für About-Karten
-  aboutCards.forEach(card => {
-    if (card) {
-      card.addEventListener('mousemove', handleTilt);
-      card.addEventListener('mouseleave', resetTilt);
-    }
-  });
-
-  // Hover-Effekt für Safety-Features
-  safetyFeatures.forEach(feature => {
-    if (feature) {
-      feature.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateX(10px)';
-      });
-      
-      feature.addEventListener('mouseleave', function() {
-        this.style.transform = '';
-      });
-    }
-  });
-  
-  // Glitch-Effekt für Hero-Titel verstärken
-  if (heroTitle) {
-    heroTitle.addEventListener('mouseover', () => {
-      heroTitle.classList.add('glitch-intense');
-    });
-    
-    heroTitle.addEventListener('mouseout', () => {
-      heroTitle.classList.remove('glitch-intense');
-    });
-  }
-  
-  // Mobile Menü Toggle
+  // Initialisierung
+  // Header-Events
   if (mobileMenuToggle) {
     mobileMenuToggle.addEventListener('click', () => {
-      if (mobileMenu) {
-        mobileMenu.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
+      if (mobileMenu) mobileMenu.classList.add('active');
     });
   }
   
   if (mobileMenuClose) {
     mobileMenuClose.addEventListener('click', () => {
-      if (mobileMenu) {
-        mobileMenu.classList.remove('active');
-        document.body.style.overflow = '';
-      }
+      if (mobileMenu) mobileMenu.classList.remove('active');
     });
   }
   
-  // Statistiken animieren - mit Verzögerung für bessere Performance
-  setTimeout(animateStats, 500);
-  
-  // Events laden - mit Verzögerung für bessere Performance
-  setTimeout(loadEvents, 500);
-  
-  // Smooth Scroll für Anker-Links
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    if (anchor) {
-      anchor.addEventListener('click', function(e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
+  // Tab Functionality
+  targetTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs
+      targetTabs.forEach(t => t.classList.remove('active'));
+      
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      
+      // Get target content from data attribute
+      const targetId = tab.getAttribute('data-target');
+      
+      // Hide all content
+      document.querySelectorAll('.target-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Show target content
+      const targetContent = document.getElementById(`${targetId}-content`);
+      if (targetContent) {
+        targetContent.classList.add('active');
         
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          e.preventDefault();
-          window.scrollTo({
-            top: targetElement.offsetTop - 100,
-            behavior: 'smooth'
-          });
+        // Animate cards with a small delay
+        setTimeout(() => {
+          animateFeatureCards(targetContent);
+        }, 100);
+      }
+    });
+  });
+  
+  // Card tilt effect
+  document.querySelectorAll('.feature-card, .news-card, .about-card').forEach(card => {
+    card.addEventListener('mousemove', handleTilt);
+    card.addEventListener('mouseleave', resetTilt);
+  });
+  
+  // Ripple effect
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      createLinkRipple(e, this);
+    });
+  });
+  
+  // Events filtern
+  if (filterButtons.length) {
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Get filter value
+        const filter = this.getAttribute('data-filter');
+        
+        // Filter events
+        filterEvents(filter);
+      });
+    });
+  }
+  
+  // Mobile Navigation
+  if (mobileNavLinks.length) {
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (mobileMenu) mobileMenu.classList.remove('active');
+      });
+    });
+  }
+  
+  // Events laden
+  loadEvents();
+  
+  // Parallax-Effekte
+  parallaxSections();
+  
+  // Scroll-Animationen
+  animateOnScroll();
+  
+  // Stats animieren - direkt initialisieren
+  initializeStatsAnimation();
+  
+  // DSGVO Banner anzeigen (nach kurzem Delay)
+  setTimeout(() => {
+    const privacyBanner = document.getElementById('privacy-banner');
+    if (privacyBanner && !localStorage.getItem('privacy-accepted')) {
+      privacyBanner.classList.add('visible');
+      
+      // Accept button
+      const acceptBtn = document.getElementById('privacy-accept');
+      if (acceptBtn) {
+        acceptBtn.addEventListener('click', () => {
+          localStorage.setItem('privacy-accepted', 'true');
+          privacyBanner.classList.remove('visible');
+          showNotification('Datenschutzeinstellungen gespeichert', 'success');
+        });
+      }
+      
+      // Settings button
+      const settingsBtn = document.getElementById('privacy-settings');
+      if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+          // Redirect to privacy settings page or show modal
+          showNotification('Datenschutzeinstellungen werden geladen...', 'info');
+          // Here you would typically open a modal or redirect
+        });
+      }
+    }
+  }, 2000);
+  
+  // Initialisiere direkt die Statszähler Animation
+  function initializeStatsAnimation() {
+    // Stelle sicher, dass Statistikzähler sofort animiert werden
+    const statItems = document.querySelectorAll('.stat-item');
+    const statValues = document.querySelectorAll('.stat-value');
+    
+    if (statValues.length > 0) {
+      // Elemente sichtbar machen
+      statItems.forEach(item => {
+        item.classList.add('animate-in');
+      });
+      
+      // Zähler starten
+      statValues.forEach(element => {
+        const finalValue = parseInt(element.getAttribute('data-count'), 10);
+        if (!isNaN(finalValue)) {
+          animateCounter(element, finalValue);
         }
       });
     }
-  });
-  
-  // Easter Egg - Konami Code
-  let konamiCodePosition = 0;
-  const konamiCode = [
-    'ArrowUp', 'ArrowUp',
-    'ArrowDown', 'ArrowDown',
-    'ArrowLeft', 'ArrowRight',
-    'ArrowLeft', 'ArrowRight',
-    'b', 'a'
-  ];
-  
-  document.addEventListener('keydown', function(e) {
-    if (e.key === konamiCode[konamiCodePosition]) {
-      konamiCodePosition++;
-      
-      if (konamiCodePosition === konamiCode.length) {
-        activateEasterEgg();
-        konamiCodePosition = 0;
-      }
-    } else {
-      konamiCodePosition = 0;
-    }
-  });
-  
-  function activateEasterEgg() {
-    try {
-      // Matrix-Regen-Effekt aktivieren
-      const existingCanvas = document.getElementById('matrix-rain');
-      if (existingCanvas) {
-        existingCanvas.remove();
-      }
-      
-      const matrixRain = document.createElement('canvas');
-      matrixRain.id = 'matrix-rain';
-      matrixRain.style.position = 'fixed';
-      matrixRain.style.top = '0';
-      matrixRain.style.left = '0';
-      matrixRain.style.width = '100%';
-      matrixRain.style.height = '100%';
-      matrixRain.style.zIndex = '9999';
-      matrixRain.style.pointerEvents = 'none';
-      document.body.appendChild(matrixRain);
-      
-      initMatrixRain();
-      
-      showNotification('Easter Egg aktiviert!', 'success', 5000);
-      
-      // Nach einiger Zeit entfernen
-      setTimeout(() => {
-        if (matrixRain.parentNode) {
-          matrixRain.remove();
-        }
-      }, 10000);
-    } catch (error) {
-      console.warn('Easter egg error:', error);
-    }
-  }
-  
-  function initMatrixRain() {
-    try {
-      const canvas = document.getElementById('matrix-rain');
-      if (!canvas) return;
-      
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$+-*/=%"\'#&_(),.;:?!\\|{}<>[]^~';
-      const columns = Math.floor(canvas.width / 20);
-      const drops = [];
-      
-      for (let i = 0; i < columns; i++) {
-        drops[i] = Math.random() * -100;
-      }
-      
-      function draw() {
-        if (!ctx) return;
-        
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.fillStyle = '#0f0';
-        ctx.font = '15px monospace';
-        
-        for (let i = 0; i < drops.length; i++) {
-          const text = characters[Math.floor(Math.random() * characters.length)];
-          ctx.fillText(text, i * 20, drops[i] * 20);
-          
-          if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
-            drops[i] = 0;
-          }
-          
-          drops[i]++;
-        }
-        
-        // Canvas könnte in der Zwischenzeit entfernt worden sein
-        if (document.getElementById('matrix-rain')) {
-          requestAnimationFrame(draw);
-        }
-      }
-      
-      draw();
-    } catch (error) {
-      console.warn('Matrix rain error:', error);
-    }
-  }
-
-
-// Schnelleres Laden der Features (ändere die Zeit von 500ms auf 100ms)
-setTimeout(function() {
-  const featuresSection = document.querySelector('.features-section');
-  if (featuresSection) {
-    featuresSection.style.opacity = '1';
     
-    // Alle Feature-Karten sofort anzeigen
-    document.querySelectorAll('.feature-card').forEach(card => {
-      card.classList.add('animate-in');
+    // Überprüfe den Scroll und animiere bei Bedarf
+    window.addEventListener('scroll', function() {
+      animateOnScroll();
+      
+      // Zusätzlich auf news-trial und stat-trial Elemente achten
+      const trialElements = document.querySelectorAll('.stat-trial, .news-trial');
+      trialElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const isVisible = (rect.top <= window.innerHeight && rect.bottom >= 0);
+        if (isVisible) {
+          el.style.visibility = 'visible';
+          el.style.opacity = '1';
+        }
+      });
     });
   }
-}, 100);
-
+  
+  // Eine einmalige Überprüfung und Animation beim Seitenstart
+  setTimeout(() => {
+    animateOnScroll();
+    window.dispatchEvent(new Event('scroll'));
+  }, 500);
 });

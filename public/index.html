@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/mythic-effects.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Preload critical scripts -->
+  <script src="./js/smoothload.js"></script>
   <!-- Open Graph Tags -->
   <meta property="og:title" content="Elysian - Innovative Event & Party-Community Plattform">
   <meta property="og:description" content="Die Zukunft des Nachtlebens - Events, Interaktion, Sicherheit und VIP-Zugang zur Underground-Szene.">
@@ -25,32 +27,6 @@
   </script>
 </head>
 <body>
-  <!-- Intro-Animation -->
-  <div class="intro-animation">
-    <video class="intro-video" autoplay loop muted playsinline>
-      <source src="opening/opening.mp4" type="video/mp4">
-    </video>
-    <div class="intro-tagline">Elysian</div>
-  </div>
-
-  <!-- Neuronales Netzwerk Hintergrund (dynamisch generiert) -->
-  <canvas class="neural-bg" aria-hidden="true"></canvas>
-  
-  <!-- Dynamischer Hintergrund -->
-  <div class="bg-animation" aria-hidden="true"></div>
-  <div id="particles-js" aria-hidden="true"></div>
-  
-  <!-- Glitch-Effekt-Overlay -->
-  <div class="glitch-overlay" aria-hidden="true"></div>
-
-  <!-- Glühende Punkte im Hintergrund -->
-  <div class="glow-dots" aria-hidden="true">
-    <div class="glow-dot" style="width:300px; height:300px; top:20%; left:10%;"></div>
-    <div class="glow-dot" style="width:250px; height:250px; top:60%; left:80%;"></div>
-    <div class="glow-dot" style="width:200px; height:200px; top:30%; left:70%;"></div>
-    <div class="glow-dot" style="width:180px; height:180px; top:80%; left:30%;"></div>
-  </div>
-
   <!-- HEADER -->
   <header class="main-header">
     <div class="logo-area">
@@ -78,15 +54,41 @@
     </div>
   </header>
 
+  <!-- Intro-Animation -->
+  <div class="intro-animation">
+    <video class="intro-video" autoplay loop muted playsinline>
+      <source src="opening/opening.mp4" type="video/mp4">
+    </video>
+    <div class="intro-tagline">Elysian</div>
+  </div>
+
+  <!-- Neuronales Netzwerk Hintergrund (dynamisch generiert) -->
+  <canvas class="neural-bg" aria-hidden="true"></canvas>
+  
+  <!-- Dynamischer Hintergrund -->
+  <div class="bg-animation" aria-hidden="true"></div>
+  <div id="particles-js" aria-hidden="true"></div>
+  
+  <!-- Glitch-Effekt-Overlay -->
+  <div class="glitch-overlay" aria-hidden="true"></div>
+
+  <!-- Glühende Punkte im Hintergrund -->
+  <div class="glow-dots" aria-hidden="true">
+    <div class="glow-dot" style="width:300px; height:300px; top:20%; left:10%;"></div>
+    <div class="glow-dot" style="width:250px; height:250px; top:60%; left:80%;"></div>
+    <div class="glow-dot" style="width:200px; height:200px; top:30%; left:70%;"></div>
+    <div class="glow-dot" style="width:180px; height:180px; top:80%; left:30%;"></div>
+  </div>
+
   <!-- Hero-Abschnitt -->
-  <section class="hero">
+  <section class="hero hero-compact hero-no-gap">
     <div class="hero-mask"></div>
-    <div class="hero-content">
+    <div class="hero-content animate-in">
       <h1 class="glitch" data-text="ELYSIAN">ELYSIAN</h1>
       <h2 class="hero-subtitle holographic-text">Die Event & Party-Revolution</h2>
-      <p class="hero-description">Elysian vernetzt und schützt dich bei Events wie nie zuvor. Mit interaktiven Live-Maps, 
-        Votings und dem Rescue-Button revolutionieren wir das Nachtleben. <strong>Du gestaltest die Party mit</strong> - 
-        ob als Besucher, Creator oder Veranstalter.</p>
+      <div class="hero-description-box">
+        <p class="hero-description">Elysian vernetzt und schützt dich bei Events wie nie zuvor. Mit interaktiven Live-Maps, Votings und dem Rescue-Button revolutionieren wir das Nachtleben. <strong>Du gestaltest die Party mit</strong> - ob als Besucher, Creator oder Veranstalter.</p>
+      </div>
       <div class="hero-tags">
         <span class="tag">Sichere Events</span>
         <span class="tag">Community</span>
@@ -100,7 +102,7 @@
           <span class="btn-text">Jetzt Teil werden</span>
           <i class="fas fa-arrow-right btn-icon"></i>
         </a>
-        <a href="#about" class="btn secondary-btn morph">
+        <a href="javascript:void(0)" onclick="document.getElementById('was-ist-elysian').scrollIntoView({behavior: 'smooth', block: 'center'})" class="btn secondary-btn morph" id="mehr-erfahren-btn">
           <span class="btn-text">Mehr erfahren</span>
           <i class="fas fa-info-circle btn-icon"></i>
         </a>
@@ -113,7 +115,6 @@
         <div class="pulse-circle"></div>
         <div class="pulse-circle"></div>
       </div>
-      
       <!-- Parallax-Shapes -->
       <div class="parallax-shape" style="width:200px; height:200px; top:20%; left:15%;" data-speed="0.05"></div>
       <div class="parallax-shape" style="width:300px; height:300px; top:60%; left:70%;" data-speed="0.1"></div>
@@ -134,7 +135,7 @@
   <!-- About-Abschnitt (Neu) -->
   <section id="about" class="about-section">
     <div class="section-container">
-      <h2 class="section-title glitch-hover">Was ist <span class="highlight">Elysian</span>?</h2>
+      <h2 class="section-title glitch-hover" id="was-ist-elysian">Was ist <span class="highlight">Elysian</span>?</h2>
       
       <div class="about-grid">
         <div class="about-card cyber-border">
@@ -171,7 +172,7 @@
         <h3 class="vision-subtitle">Unsere Vision</h3>
         <p class="vision-text">"Elysian ist nicht nur eine App – es ist eine Bewegung, die Clubkultur, Technologie & Sicherheit vereint. Wir erschaffen einen Raum, in dem sich alle wohlfühlen können, während wir das Nachtleben durch Innovation auf ein neues Level heben."</p>
       </div>
-     
+    </div>
     
     <!-- Parallax-Shapes -->
     <div class="parallax-shape" style="width:350px; height:350px; top:40%; left:85%;" data-speed="0.1"></div>
@@ -394,7 +395,7 @@
   <!-- Geschwungener Übergang -->
   <div class="section-transition">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
-      <path fill="#10001A" fill-opacity="1" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,53.3C960,53,1056,43,1152,42.7C1248,43,1344,53,1392,58.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+      <path fill="#10001A" fill-opacity="1" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,53.3C960,53,1056,43,1152,42.7C1248,43,1344,53,1392,58.7L1440,64L1440,100L1392,100C1344,100,1248,100,1152,100C1056,100,960,100,864,100C768,100,672,100,576,100C480,100,384,100,288,100C192,100,96,100,48,100L0,100Z"></path>
     </svg>
   </div>
 
@@ -457,6 +458,7 @@
         <blockquote>"Unsere Mission ist es, die Sicherheit im Nachtleben zu revolutionieren und einen Raum zu schaffen, in dem sich jeder wohlfühlen kann. Mit innovativen Features wie dem Rescue-Button und Safezones setzen wir neue Maßstäbe."</blockquote>
         <cite>– Das Elysian Team</cite>
       </div>
+    </div>
     
     <!-- Parallax-Shapes -->
     <div class="parallax-shape" style="width:300px; height:300px; top:50%; left:15%;" data-speed="0.12"></div>
@@ -511,41 +513,58 @@
       
       <div class="stats-grid">
         <div class="stat-item cyber-border">
-          <div class="stat-value" data-count="3472">0</div>
+          <div class="stat-value" data-count="4857">0</div>
           <div class="stat-label">Community Mitglieder</div>
+          <div class="stat-growth">+23% im letzten Monat</div>
+          <div class="stat-trial">Trial #023</div>
           <svg class="stat-graph" viewBox="0 0 100 30">
-            <polyline points="0,25 10,20 20,22 30,15 40,18 50,10 60,8 70,12 80,5 90,7 100,2" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+            <polyline points="0,25 10,20 20,18 30,15 40,13 50,10 60,8 70,7 80,5 90,4 100,2" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
           </svg>
         </div>
         
         <div class="stat-item cyber-border">
-          <div class="stat-value" data-count="127">0</div>
+          <div class="stat-value" data-count="183">0</div>
           <div class="stat-label">Events pro Monat</div>
+          <div class="stat-growth">+15% im letzten Monat</div>
+          <div class="stat-trial">Trial #047</div>
           <svg class="stat-graph" viewBox="0 0 100 30">
-            <polyline points="0,15 10,18 20,12 30,10 40,15 50,8 60,12 70,5 80,10 90,2 100,5" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+            <polyline points="0,15 10,14 20,12 30,10 40,12 50,8 60,9 70,5 80,6 90,2 100,3" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
           </svg>
         </div>
         
         <div class="stat-item cyber-border">
-          <div class="stat-value" data-count="32">0</div>
+          <div class="stat-value" data-count="42">0</div>
           <div class="stat-label">Städte</div>
+          <div class="stat-growth">+5 neue Städte</div>
+          <div class="stat-trial">Trial #015</div>
           <svg class="stat-graph" viewBox="0 0 100 30">
-            <polyline points="0,20 10,18 20,15 30,16 40,10 50,12 60,8 70,9 80,5 90,6 100,2" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+            <polyline points="0,20 10,18 20,16 30,16 40,14 50,12 60,10 70,9 80,7 90,6 100,5" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
           </svg>
         </div>
         
         <div class="stat-item cyber-border">
-          <div class="stat-value" data-count="98">0</div>
+          <div class="stat-value" data-count="124">0</div>
           <div class="stat-label">Partner-Clubs</div>
+          <div class="stat-growth">+8 im letzten Monat</div>
+          <div class="stat-trial">Trial #036</div>
           <svg class="stat-graph" viewBox="0 0 100 30">
-            <polyline points="0,22 10,18 20,20 30,15 40,16 50,10 60,12 70,8 80,9 90,5 100,3" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
+            <polyline points="0,22 10,20 20,18 30,15 40,16 50,12 60,10 70,8 80,7 90,5 100,3" fill="none" stroke="#c13afc" stroke-width="2"></polyline>
           </svg>
         </div>
+      </div>
+      
+      <div class="stats-cta">
+        <p class="stats-description">Werde Teil einer wachsenden Community von Eventliebhabern, Kreativen und Veranstaltern. Gemeinsam gestalten wir die Zukunft der Event-Szene.</p>
+        <a href="register.html" class="btn secondary-btn morph">
+          <span class="btn-text">Der Community beitreten</span>
+          <i class="fas fa-users btn-icon"></i>
+        </a>
       </div>
     </div>
     
     <!-- Parallax-Shapes -->
     <div class="parallax-shape" style="width:300px; height:300px; top:50%; left:15%;" data-speed="0.12"></div>
+    <div class="parallax-shape pulse-shape" style="width:200px; height:200px; top:20%; right:15%;" data-speed="0.08"></div>
   </section>
 
   <!-- Neuigkeiten-Abschnitt -->
@@ -560,11 +579,12 @@
               <span class="day">15</span>
               <span class="month">MRZ</span>
             </div>
+            <div class="news-trial">Trial #054</div>
           </div>
           <div class="news-content">
             <h3>Neues Feature: Rescue-Button</h3>
             <p>Der Rescue-Button für mehr Sicherheit ist jetzt live. Im Notfall schnelle Hilfe rufen oder Freunde alarmieren.</p>
-            <a href="#" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+            <a href="forum.html#rescue-feature" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
           </div>
           <div class="card-glare"></div>
         </div>
@@ -575,11 +595,12 @@
               <span class="day">08</span>
               <span class="month">MRZ</span>
             </div>
+            <div class="news-trial">Trial #049</div>
           </div>
           <div class="news-content">
             <h3>DJ Pulse - Neues Team</h3>
             <p>DJ Pulse ist jetzt offizieller Partner und unterstützt das Pulse-Team. Exklusive Sets ab nächster Woche.</p>
-            <a href="#" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+            <a href="forum.html#dj-pulse" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
           </div>
           <div class="card-glare"></div>
         </div>
@@ -590,14 +611,73 @@
               <span class="day">02</span>
               <span class="month">MRZ</span>
             </div>
+            <div class="news-trial">Trial #043</div>
           </div>
           <div class="news-content">
             <h3>Live-Voting System Release</h3>
             <p>Ab sofort können Eventbesucher mit unserem Live-Voting System die Musik beeinflussen und aktiv am Event teilnehmen.</p>
-            <a href="#" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+            <a href="forum.html#live-voting" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
           </div>
           <div class="card-glare"></div>
         </div>
+      </div>
+
+      <!-- Adding more news updates -->
+      <div class="news-grid" style="margin-top: 2rem;">
+        <div class="news-card cyber-border">
+          <div class="news-image" style="--gradient-color: rgba(120, 80, 240, 0.8)">
+            <div class="news-date">
+              <span class="day">28</span>
+              <span class="month">FEB</span>
+            </div>
+            <div class="news-trial">Trial #038</div>
+          </div>
+          <div class="news-content">
+            <h3>Community-Feature: Freundesfinder</h3>
+            <p>Mit dem neuen Freundesfinder-Feature kannst du deine Freunde auf Events in Echtzeit finden und Treffpunkte setzen.</p>
+            <a href="forum.html#friends-finder" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="card-glare"></div>
+        </div>
+        
+        <div class="news-card cyber-border">
+          <div class="news-image" style="--gradient-color: rgba(80, 200, 120, 0.8)">
+            <div class="news-date">
+              <span class="day">14</span>
+              <span class="month">FEB</span>
+            </div>
+            <div class="news-trial">Trial #032</div>
+          </div>
+          <div class="news-content">
+            <h3>Neue Partner-Locations</h3>
+            <p>Wir begrüßen 12 neue Partner-Locations in Berlin, Hamburg und München. Exklusive Events für Mitglieder geplant.</p>
+            <a href="forum.html#new-locations" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="card-glare"></div>
+        </div>
+        
+        <div class="news-card cyber-border">
+          <div class="news-image" style="--gradient-color: rgba(255, 150, 50, 0.8)">
+            <div class="news-date">
+              <span class="day">05</span>
+              <span class="month">FEB</span>
+            </div>
+            <div class="news-trial">Trial #027</div>
+          </div>
+          <div class="news-content">
+            <h3>App-Update: Version 2.5</h3>
+            <p>Unser neuestes Update bringt verbesserte Performance, ein neues UI-Design und zahlreiche Fehlerbehebungen.</p>
+            <a href="forum.html#app-update" class="news-link">Mehr erfahren <i class="fas fa-chevron-right"></i></a>
+          </div>
+          <div class="card-glare"></div>
+        </div>
+      </div>
+      
+      <div class="news-view-all" style="text-align: center; margin-top: 2rem;">
+        <a href="forum.html" class="btn secondary-btn morph">
+          <span class="btn-text">Alle Updates anzeigen</span>
+          <i class="fas fa-newspaper btn-icon"></i>
+        </a>
       </div>
     </div>
     
@@ -736,7 +816,7 @@
       <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
       <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
       <a href="#" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
-    </div><p class="hero-description"></p>
+    </div>
   </div>
 
   <!-- Datenschutz-Banner -->
@@ -756,5 +836,72 @@
   <!-- JavaScript -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
   <script src="./js/index.js"></script>
+  <script>
+    // DOM ready script
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animation for stat items
+      const statItems = document.querySelectorAll('.stat-item');
+      const statValues = document.querySelectorAll('.stat-value');
+      const trialNumbers = document.querySelectorAll('.trial-number');
+      const newsCards = document.querySelectorAll('.news-card');
+      
+      // Make sure stats are visible
+      statItems.forEach(item => {
+        item.style.opacity = '1';
+        item.style.visibility = 'visible';
+      });
+      
+      statValues.forEach(value => {
+        value.style.opacity = '1';
+        value.style.visibility = 'visible';
+      });
+      
+      trialNumbers.forEach(number => {
+        number.style.opacity = '1';
+        number.style.visibility = 'visible';
+      });
+      
+      // Animate news cards with a staggered effect
+      newsCards.forEach((card, index) => {
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 200 + (index * 150));
+      });
+      
+      // Animate counters
+      const counters = document.querySelectorAll('.stat-value[data-count]');
+      counters.forEach(counter => {
+        animateCounter(counter);
+      });
+      
+      // Function to animate counter
+      function animateCounter(el) {
+        const target = parseInt(el.getAttribute('data-count'));
+        const duration = 2000; // milliseconds
+        const startTime = performance.now();
+        const startValue = 0;
+        
+        function easeOutQuart(t) {
+          return 1 - Math.pow(1 - t, 4);
+        }
+        
+        function updateCounter(currentTime) {
+          const elapsedTime = currentTime - startTime;
+          
+          if (elapsedTime < duration) {
+            const progress = easeOutQuart(elapsedTime / duration);
+            const currentCount = Math.floor(startValue + progress * (target - startValue));
+            el.textContent = currentCount.toLocaleString();
+            requestAnimationFrame(updateCounter);
+          } else {
+            el.textContent = target.toLocaleString();
+          }
+        }
+        
+        requestAnimationFrame(updateCounter);
+      }
+    });
+  </script>
 </body>
 </html>
